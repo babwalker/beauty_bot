@@ -78,6 +78,12 @@ inline_translations = {
             "natural": "Только натуральные компоненты",
             "no-silicones": "Без силиконов и парабенов",
             "no-preference": "Неважно"
+        },
+        "FINAL_REPORT": {
+            "our_courses": "Наши курсы",
+            "master_certification": "Подтверждение квалификации Мастера",
+            "trainer_certification": "Подтверждение квалификации Тренера",
+            "our_instagram": "Наш инстаграм"
         }
     },
 
@@ -160,6 +166,12 @@ inline_translations = {
             "natural": "Only natural ingredients",
             "no-silicones": "No silicones or parabens",
             "no-preference": "No preference"
+        },
+        "FINAL_REPORT": {
+            "our_courses": "Our courses",
+            "master_certification": "Master qualification confirmation",
+            "trainer_certification": "Trainer qualification confirmation",
+            "our_instagram": "Our Instagram"
         }
     },
 
@@ -242,9 +254,16 @@ inline_translations = {
             "natural": "Nur natürliche Inhaltsstoffe",
             "no-silicones": "Ohne Silikone und Parabene",
             "no-preference": "Egal"
+        },
+        "FINAL_REPORT": {
+            "our_courses": "Unsere Kurse",
+            "master_certification": "Bestätigungsqualifikation des Meisters",
+            "trainer_certification": "Trainerqualifikation bestätigen",
+            "our_instagram": "Unser Instagram"
         }
     }
-}
+}   
+
 
 AGES = ["under20", "20-30", "30-40", "40-50", "50-60", "60plus"]
 

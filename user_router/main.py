@@ -681,7 +681,7 @@ async def process_composition_done(callback: types.CallbackQuery, state: FSMCont
     
     response = (
         f"{progress}\n\n"
-        f"{get_text(callback.from_user.id, 'upload_photo_instruction')}"
+        f"{get_text(callback.from_user.id, 'upload_full_face_photo')}"
     )
     
     await callback.message.edit_text(response, reply_markup=builder.as_markup())
@@ -699,7 +699,7 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
     builder = InlineKeyboardBuilder()
     builder.button(
         text=get_text(message.from_user.id, "back_button"),
-        callback_data="back_procedures"
+        callback_data="back_photo_full_face"
     )
 
     file_id = message.photo[-1].file_id
@@ -713,6 +713,7 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
     response = analysis_image(image_path=file_path)
 
     if response["face"] == True:
+        await state.update_data(photo_full_face_id=file_name)
         await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
         await state.update_data(full_face=get_text(message.from_user.id, "full_face"))
         progress = await show_progress(state)
@@ -721,11 +722,11 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
             chat_id=message.chat.id,
             text=(
                 f"{progress}\n\n"
-                f"{get_text(message.from_user.id, 'upload_profile_photo_instruction')}"
+                f"{get_text(message.from_user.id, 'upload_right_profile_photo')}"
             ),
             reply_markup=builder.as_markup()
         )
-        await state.set_state(Form.photo_right_side_face)
+        await state.set_state(Form.photo_right_profile_face)
     else:
         os.remove(file_path)
         await bot.edit_message_text(
@@ -735,8 +736,8 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
             reply_markup=builder.as_markup()
         )
 
-@router.message(F.content_type == types.ContentType.PHOTO, Form.photo_right_side_face)
-async def process_photo_right_side_face(message: types.Message, state: FSMContext):
+@router.message(F.content_type == types.ContentType.PHOTO, Form.photo_right_profile_face)
+async def process_photo_right_profile_face(message: types.Message, state: FSMContext):
     await message.delete()
     await message.answer(text=get_text(message.from_user.id, "processing_photo"))
     await state.update_data(additional_message=message.message_id+1)
@@ -744,7 +745,7 @@ async def process_photo_right_side_face(message: types.Message, state: FSMContex
     prev_message = data.get("prev_message")
 
     builder = InlineKeyboardBuilder()
-    builder.button(text="⬅️ Назад", callback_data="back_right_side_face")
+    builder.button(text=get_text(message.from_user.id, "back_button"), callback_data="back_photo_right_profile_face")
 
     file_id = message.photo[-1].file_id
     file_name = random.randint(100000, 1000000)
@@ -754,13 +755,14 @@ async def process_photo_right_side_face(message: types.Message, state: FSMContex
     response = analysis_image(image_path=file_path)
 
     if response["face"] == True:
+        await state.update_data(photo_right_profile_face_id=file_name)
         await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
-        await state.update_data(right_side_face = "Загружено")
+        await state.update_data(right_side_face = get_text(message.from_user.id, "full_face"))
         progress = await show_progress(state)
         await bot.edit_message_text(
             message_id=prev_message,
             chat_id=message.chat.id,
-            text=f"{progress}\n\nЗагрузите фото лица для анализа - 📌 Важно: Фото должно быть сделано без макияжа, при хорошем освещении, профиль слева.",
+            text=f"{progress}\n\n{get_text(message.from_user.id, "upload_left_profile_photo")}",
             reply_markup=builder.as_markup()
         )
         await state.set_state(Form.photo_left_side_face)
@@ -769,10 +771,9 @@ async def process_photo_right_side_face(message: types.Message, state: FSMContex
         await bot.edit_message_text(
             message_id=prev_message,
             chat_id=message.chat.id,
-            text="Отправьте изображение с лицом",
+            text=get_text(message.from_user.id, "no_face_error_left"),
             reply_markup=builder.as_markup()
         )
-    await message.delete()
 
 @router.message(F.content_type == types.ContentType.PHOTO, Form.photo_left_side_face)
 async def process_photo_left_side_face(message: types.Message, state: FSMContext):
@@ -783,7 +784,7 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
     prev_message = data.get("prev_message")
 
     builder = InlineKeyboardBuilder()
-    builder.button(text="⬅️ Назад", callback_data="back_full_face")
+    builder.button(text=get_text(message.from_user.id, "back_button"), callback_data="back_full_face")
 
     file_id = message.photo[-1].file_id
     file_name = random.randint(100000, 1000000)
@@ -793,26 +794,28 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
     response = analysis_image(image_path=file_path)
 
     if response["face"] == True:
-        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
-        await state.update_data(left_side_face = "Загружено")
+        await state.update_data(left_side_face = get_text(message.from_user.id, "full_face"))
         data = await state.get_data()
         progress = await show_progress(state)
         
         response = (
             # f"{progress}\n\n"
-            "Спасибо за ответы! На основе ваших предпочтений мы подобрали оптимальную программу ухода"
+            get_text(message.from_user.id, "thanks_message")
         )
         
         builder = InlineKeyboardBuilder()
-        builder.button(text="Наши курсы", url="https://bwa-akademy.online/courses")
-        builder.button(text="Подтверждение квалификации Мастера", url="https://bwa-akademy.online/zertifizierung_offiziell/")
-        builder.button(text="Подтверждение квалификации Тренера ", url="https://bwa-akademy.online/zertifizierung_offiziell/")
-        builder.button(text="Наш инстаграм", url="https://www.instagram.com/beauty.akademy.world/")
+        builder.button(text=get_inline_text(user_id=message.from_user.id, category="FINAL_REPORT", key="our_courses"), url="https://bwa-akademy.online/courses")
+        builder.button(text=get_inline_text(user_id=message.from_user.id, category="FINAL_REPORT", key="master_certification"), url="https://bwa-akademy.online/zertifizierung_offiziell/")
+        builder.button(text=get_inline_text(user_id=message.from_user.id, category="FINAL_REPORT", key="trainer_certification"), url="https://bwa-akademy.online/zertifizierung_offiziell/")
+        builder.button(text=get_inline_text(user_id=message.from_user.id, category="FINAL_REPORT", key="our_instagram"), url="https://www.instagram.com/beauty.akademy.world/")
+        builder.adjust(1)
 
         summary_report = get_summary_report(message.from_user.id, data)
 
         get_docx_file(data=summary_report, user_id=message.from_user.id, state_data=data)
-        document = FSInputFile(path=f"images/{message.from_user.id}/Отчет.docx")
+        document = FSInputFile(path=f"images/{message.from_user.id}/{get_text(user_id=message.from_user.id, key="report")}.docx")
+
+        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
 
         await bot.edit_message_text(
             message_id=prev_message,
@@ -824,13 +827,12 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
 
         shutil.rmtree(f"images/{message.from_user.id}")
         await state.clear()
-        # await state.set_state(Form.photo_right_side_face)
+        # await state.set_state(Form.photo_right_profile_face)
     else:
         os.remove(f"images/{message.from_user.id}/{file_name}.jpg")
         await bot.edit_message_text(
             message_id=prev_message,
             chat_id=message.chat.id,
-            text="Отправьте изображение с лицом",
+            text=get_text(message.from_user.id, "no_face_error_left"),
             reply_markup=builder.as_markup()
         )
-    await message.delete()

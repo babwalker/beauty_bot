@@ -38,5 +38,5 @@ def create_table():
 
     conn.commit()
 
-print(get_user_language(user_id=7598687905))
+# print(get_user_language(user_id=7598687905))
 # print(get_users("en")[1][0])

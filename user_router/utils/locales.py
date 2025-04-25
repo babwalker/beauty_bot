@@ -101,13 +101,17 @@ translations = {
         "procedures_question": "Как часто вы делаете профессиональные косметологические процедуры?",
         "budget_question": "Какой бюджет на уход вам комфортен?",
         "composition_question": "Есть ли у вас пожелания по составу косметики?",
-        "upload_photo_instruction": (
+        "upload_full_face_photo": (
             "Загрузите фото лица для анализа - 📌 Важно: "
             "Фото должно быть сделано без макияжа, при хорошем освещении, анфас."
         ),
-        "upload_profile_photo_instruction": (
+        "upload_right_profile_photo": (
             "Загрузите фото лица для анализа - 📌 Важно: "
             "Фото должно быть сделано без макияжа, при хорошем освещении, профиль справа"
+        ),
+        "upload_left_profile_photo": (
+            "Загрузите фото лица для анализа - 📌 Важно: "
+            "Фото должно быть сделано без макияжа, при хорошем освещении, профиль слева."
         ),
         "no_face_error": "Отправьте изображение с лицом",
         "other_skin_problems": "Укажите другие проблемы кожи:",
@@ -115,7 +119,11 @@ translations = {
         "procedures_frequency_question": "Как часто вы делаете профессиональные косметологические процедуры?",
         "processing_photo": "Анализ фото...",
         "full_face": "Загружено",
-        "right_profile_face": ""
+        "no_face_error_left": "Отправьте изображение с лицом (профиль слева)",
+        "thanks_message": (
+            "Спасибо за ответы! На основе ваших предпочтений мы подобрали оптимальную программу ухода"
+        ),
+        "report": "Отчет"
     },
     "en": {
         "back_button": "⬅️ Back",
@@ -141,11 +149,11 @@ translations = {
         "procedures_question": "How often do you get professional cosmetic treatments?",
         "budget_question": "What is your comfortable skincare budget?",
         "composition_question": "Do you have any preferences regarding cosmetic ingredients?",
-        "upload_photo_instruction": (
+        "upload_full_face_photo": (
             "Upload a photo of your face for analysis - 📌 Important: "
             "The photo should be taken without makeup, with good lighting, and face forward."
         ),
-        "upload_profile_photo_instruction": (
+        "upload_right_profile_photo": (
             "Upload a profile photo for analysis - 📌 Important: "
             "The photo should be taken without makeup, with good lighting, right side profile."
         ),
@@ -156,7 +164,15 @@ translations = {
         "procedures_frequency_question": "How often do you undergo professional cosmetic procedures?",
         "processing_photo": "Analyzing the photo...",
         "full_face": "Uploaded",
-        "right_profile_face": ""
+        "upload_left_profile_photo": (
+            "Upload a face photo for analysis - 📌 Important: "
+            "The photo should be without makeup, with good lighting, left profile view."
+        ),
+        "no_face_error_left": "Please send an image with a face (left profile)",
+        "thanks_message": (
+            "Thank you for your answers! Based on your preferences, we've selected the optimal care program"
+        ),
+        "report": "Report"
     },
     "de": {
         "back_button": "⬅️ Zurück",
@@ -182,11 +198,11 @@ translations = {
         "procedures_question": "Wie oft lässt du professionelle kosmetische Behandlungen durchführen?",
         "budget_question": "Welches Pflegebudget ist für dich angenehm?",
         "composition_question": "Hast du Wünsche bezüglich der Inhaltsstoffe?",
-        "upload_photo_instruction": (
+        "upload_full_face_photo": (
             "Lade ein Foto deines Gesichts zur Analyse hoch – 📌 Wichtig: "
             "Das Foto sollte ohne Make-up, bei guter Beleuchtung und frontal aufgenommen werden."
         ),
-        "upload_profile_photo_instruction": (
+        "upload_right_profile_photo": (
             "Lade ein Profilfoto zur Analyse hoch – 📌 Wichtig: "
             "Das Foto sollte ohne Make-up, bei guter Beleuchtung und im rechten Profil aufgenommen werden."
         ),
@@ -197,7 +213,15 @@ translations = {
         "procedures_frequency_question": "Wie oft lässt du professionelle kosmetische Behandlungen durchführen?",
         "processing_photo": "Analyse des Fotos...",
         "full_face": "Hochgeladen",
-        "right_profile_face": ""
+        "upload_left_profile_photo": (
+            "Laden Sie ein Gesichtsfoto zur Analyse hoch - 📌 Wichtig: "
+            "Das Foto sollte ohne Make-up, bei guter Beleuchtung, im linken Profil aufgenommen sein."
+        ),
+        "no_face_error_left": "Bitte senden Sie ein Bild mit einem Gesicht (linkes Profil)",
+        "thanks_message": (
+            "Vielen Dank für Ihre Antworten! Basierend auf Ihren Präferenzen haben wir das optimale Pflegeprogramm ausgewählt"
+        ),
+        "report": "Bericht"
     }
 }
 

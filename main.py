@@ -12,6 +12,7 @@ settings = Settings()
 bot = Bot(token=settings.BOT_TOKEN)
 
 async def main():
+    create_table()
     dp = Dispatcher()
     dp.include_routers(user_router, back_router, other_router, admin_router) 
 

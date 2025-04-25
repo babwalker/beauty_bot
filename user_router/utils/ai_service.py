@@ -8,6 +8,7 @@ import json
 
 from config import Settings
 from database.db import get_user_language
+from user_router.utils.service import show_progress, sync_show_progress
 
 settings = Settings()
 
@@ -138,8 +139,9 @@ summary_report_text = """You are a cosmetologist with 20 years of experience and
                 7. * * Style**: write in a friendly, professional and clear manner, avoiding unnecessarily complex medical terms.
             """
 
-def get_summary_report(user_id: any, data: dict):
+def get_summary_report(user_id: any, data):
     user_language = get_user_language(user_id=user_id)
+    user_data = sync_show_progress(data)
     client = text_genai.Client(
         api_key=settings.GENAI_TOKEN,
     )
@@ -148,7 +150,7 @@ def get_summary_report(user_id: any, data: dict):
     
     # Создаем части контента
     parts = [
-        types.Part.from_text(text=str(data)),  # Ваш текстовый запрос
+        types.Part.from_text(text=user_data),  # Ваш текстовый запрос
     ]
     
     # Добавляем фотографии

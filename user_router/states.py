@@ -15,7 +15,7 @@ class Form(StatesGroup):
     daily_products = State() 
     procedures_frequency = State()
     photo_full_face = State()
-    photo_right_side_face = State()
+    photo_right_profile_face = State()
     photo_left_side_face = State()
     budget = State()
     composition_preferences = State()

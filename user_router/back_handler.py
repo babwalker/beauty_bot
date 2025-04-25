@@ -1,3 +1,4 @@
+import os
 from aiogram import types, F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -215,26 +216,46 @@ async def process_back(callback: types.CallbackQuery, state: FSMContext):
             f"{progress}\n\n{get_text(user_id, 'composition_question')}",
             reply_markup=builder.as_markup()
         )
-        await state.set_state(Form.budget)
-
-    elif back_to == "photo":
-        data = await state.get_data()
-        selected_prefs = data.get("composition_prefs", [])
-        builder = InlineKeyboardBuilder()
-
-        for key in COMPOSITION_PREFERENCES:
-            button_text = get_inline_text(user_id, "COMPOSITION_PREFERENCES", key)
-            emoji = "✅" if button_text in selected_prefs else "◻️"
-            builder.button(text=f"{emoji} {button_text}", callback_data=f"composition_{key}")
-
-        builder.button(text=get_text(user_id, "done_button"), callback_data="done_composition")
-        builder.button(text=get_text(user_id, "back_button"), callback_data="back_budget")
-        builder.adjust(1)
-
-        await callback.message.edit_text(
-            f"{progress}\n\n{get_text(user_id, 'composition_question')}",
-            reply_markup=builder.as_markup()
-        )
         await state.set_state(Form.composition_preferences)
 
-    await callback.answer()
+    elif back_to == "photo_full_face":
+        data = await state.get_data()
+        os.remove(f"images/{callback.from_user.id}/{data.get("photo_full_face_id")}.jpg")
+        await state.update_data(full_face=None)
+        progress = await show_progress(state)
+
+        builder = InlineKeyboardBuilder()
+        builder.button(
+            text=get_text(callback.from_user.id, "back_button"),
+            callback_data="back_composition"
+        )
+        
+        response = (
+            f"{progress}\n\n"
+            f"{get_text(callback.from_user.id, 'upload_full_face_photo')}"
+        )
+        
+        await callback.message.edit_text(response, reply_markup=builder.as_markup())
+        await state.set_state(Form.photo_full_face)
+        await callback.answer()
+
+    elif back_to == "photo_right_profile_face":
+        data = await state.get_data()
+        os.remove(f"images/{callback.from_user.id}/{data.get("photo_right_profile_face_id")}.jpg")
+        await state.update_data(right_side_face=None)
+        progress = await show_progress(state)
+
+        builder = InlineKeyboardBuilder()
+        builder.button(
+            text=get_text(callback.from_user.id, "back_button"),
+            callback_data="back_photo_full_face"
+        )
+        
+        response = (
+            f"{progress}\n\n"
+            f"{get_text(callback.from_user.id, 'upload_right_profile_photo')}"
+        )
+        
+        await callback.message.edit_text(response, reply_markup=builder.as_markup())
+        await state.set_state(Form.photo_right_profile_face)
+        await callback.answer()
