@@ -15,12 +15,11 @@ settings = Settings()
 router = Router()
 bot = Bot(token=settings.BOT_TOKEN)
 
-def navigation_buttons():
+def navigation_buttons(language: str):
     """Кнопки для отмены или возвращения назад."""
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="Вернуться назад", callback_data="back")]
-            # [InlineKeyboardButton(text="Отменить", callback_data="cancel")],
+            [InlineKeyboardButton(text="Вернуться назад", callback_data=f"adminback_{language}")]
         ]
     )
 
@@ -57,7 +56,7 @@ async def process_ru_text(message: types.Message, state: FSMContext):
 async def callback_ru_yes(callback: types.CallbackQuery, state: FSMContext):
     await callback.message.edit_text("Отправьте фото/видео для рассылки")
     await callback.answer()
-    await state.set_state(Form.ru_media)
+    await state.set_state(Form.get_media)
 
 @router.callback_query(F.data.startswith("en_mailing"))
 async def callback_en_mailing(callback: types.CallbackQuery, state: FSMContext):
@@ -82,7 +81,7 @@ async def process_en_text(message: types.Message, state: FSMContext):
 async def callback_en_yes(callback: types.CallbackQuery, state: FSMContext):
     await callback.message.edit_text("Отправьте фото/видео для рассылки")
     await callback.answer()
-    await state.set_state(Form.en_media)
+    await state.set_state(Form.get_media)
 
 @router.callback_query(F.data.startswith("de_mailing"))
 async def callback_de_mailing(callback: types.CallbackQuery, state: FSMContext):
@@ -107,7 +106,7 @@ async def process_de_text(message: types.Message, state: FSMContext):
 async def callback_de_yes(callback: types.CallbackQuery, state: FSMContext):
     await callback.message.edit_text("Отправьте фото/видео для рассылки")
     await callback.answer()
-    await state.set_state(Form.de_media)
+    await state.set_state(Form.get_media)
 
 @router.callback_query(F.data.endswith("_no"))
 async def proccess_media_no(callback: types.CallbackQuery, state: FSMContext):
@@ -118,7 +117,7 @@ async def proccess_media_no(callback: types.CallbackQuery, state: FSMContext):
     ]
     await callback.message.edit_text(f"{data.get("mailing_text")}", reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
 
-@router.message(F.content_type.in_([types.ContentType.VIDEO, types.ContentType.PHOTO]))
+@router.message(Form.get_media, F.content_type.in_([types.ContentType.VIDEO, types.ContentType.PHOTO]))
 async def process_collect_videos(message: types.Message, state: FSMContext):
     data = await state.get_data()
     text = data.get("mailing_text")
@@ -148,9 +147,10 @@ async def confirm_publication_text(callback: types.CallbackQuery, state: FSMCont
 
 @router.callback_query(F.data == "text_edit")
 async def edit_data(callback: types.CallbackQuery, state: FSMContext):
-    current_state = await state.get_state()
+    data = await state.get_data()
+    language = data.get("language")
 
-    if current_state == Form.ru_media:
+    if language == "ru":
         await callback.message.edit_text("Введите текст для рассылки на русском языке")
         await callback.answer()
 
@@ -158,7 +158,7 @@ async def edit_data(callback: types.CallbackQuery, state: FSMContext):
         await state.update_data(mailing_text=None)
         await state.set_state(Form.ru_mailing)
     
-    if current_state == Form.en_media:
+    elif language == "en":
         await callback.message.edit_text("Введите текст для рассылки на английском языке")
         await callback.answer()
 
@@ -166,7 +166,7 @@ async def edit_data(callback: types.CallbackQuery, state: FSMContext):
         await state.update_data(mailing_text=None)
         await state.set_state(Form.en_mailing)
 
-    if current_state == Form.de_media:
+    elif language == "de":
         await callback.message.edit_text("Введите текст для рассылки на немецком языке")
         await callback.answer()
 
@@ -199,13 +199,14 @@ async def edit_data(callback: types.CallbackQuery, state: FSMContext):
     await bot.delete_messages(chat_id=callback.from_user.id, message_ids=message_ids)
 
     text = data.get("mailing_text")
-    await callback.message.edit_text(f"{text}\n\nПришлите фото/видео для рассылки", reply_markup=navigation_buttons())
+    await callback.message.edit_text(f"{text}\n\nПришлите фото/видео для рассылки", reply_markup=navigation_buttons(language=data.get("language")))
 
     await state.update_data(prev_message=callback.message.message_id)
 
-@router.callback_query(F.data == "back")
+@router.callback_query(F.data.startswith("adminback_"),)
 async def go_back(callback: types.CallbackQuery, state: FSMContext):
     current_state = await state.get_state()
+    back_to = callback.data.split("_")[1]
 
     # Определяем, куда возвращать пользователя в зависимости от текущего состояния
     if current_state in [Form.ru_mailing, Form.de_mailing, Form.en_mailing]:
@@ -219,7 +220,7 @@ async def go_back(callback: types.CallbackQuery, state: FSMContext):
         await callback.answer()
         await callback.message.edit_text("Выберите для какого языка нужна рассылка", reply_markup=builder.as_markup())
     
-    elif current_state == Form.ru_media:
+    elif back_to == "ru":
         await callback.message.edit_text("Введите текст для рассылки на русском языке")
         await callback.answer()
 
@@ -227,7 +228,7 @@ async def go_back(callback: types.CallbackQuery, state: FSMContext):
         await state.update_data(mailing_text=None)
         await state.set_state(Form.ru_mailing)
     
-    elif current_state == Form.en_media:
+    elif back_to == "en":
         await callback.message.edit_text("Введите текст для рассылки на английском языке")
         await callback.answer()
 
@@ -235,7 +236,7 @@ async def go_back(callback: types.CallbackQuery, state: FSMContext):
         await state.update_data(mailing_text=None)
         await state.set_state(Form.en_mailing)
 
-    elif current_state == Form.de_media:
+    elif back_to == "de":
         await callback.message.edit_text("Введите текст для рассылки на немецком языке")
         await callback.answer()
 

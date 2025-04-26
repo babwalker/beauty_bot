@@ -1,3 +1,4 @@
+import asyncio
 import os
 import random
 import shutil
@@ -5,7 +6,7 @@ from aiogram import Bot, types, Router, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardButton, InputMediaVideo, InputMediaPhoto
 from aiogram.types.input_file import FSInputFile
 
 import re
@@ -110,7 +111,17 @@ async def start(message: types.Message, state: FSMContext):
             )
     builder.adjust(1)
 
+    media_list = [
+        InputMediaPhoto(media="AgACAgIAAxkBAAIZ_2gMtyaTKwVU27HaZB-M8NZPpHxYAAJo8TEb-SppSN1U5IpeWc4FAQADAgADeQADNgQ"),
+        InputMediaPhoto(media="AgACAgIAAxkBAAIaAAFoDLcmL5s9Q-TfoZWBWSH6GE4k1QACafExG_kqaUhAdGU7tfJX9QEAAwIAA3kAAzYE"),
+        InputMediaVideo(media="BAACAgIAAxkBAAIaAmgMt4FlNJiIM4XXKbt14TfMrRvQAAJ0fAAC-SppSOE-VCp2TCWENgQ"),
+        InputMediaVideo(media="BAACAgIAAxkBAAIaA2gMt4G56VfI1mpjqSlcTNfltjmWAAJ1fAAC-SppSL1p7Jofpy1PNgQ"),
+        InputMediaVideo(media="BAACAgIAAxkBAAIaBGgMt4HPnlerB9WqK4Bq0PqfDTv5AAJ2fAAC-SppSIO-3pZpCxAmNgQ"),
+    ]
+
     await state.clear()
+    await message.delete()
+    await message.answer_media_group(media=media_list)
     await message.answer(get_text(message.from_user.id, "start"), reply_markup=builder.as_markup())
 
 @router.callback_query(F.data == "start")
@@ -118,17 +129,26 @@ async def process_start(callback: types.CallbackQuery, state: FSMContext):
     await callback.message.answer(get_text(user_id=callback.from_user.id, key="start_skin_analys"))
     await state.set_state(Form.name)
     await state.update_data(user_id=callback.from_user.id)
-    await state.update_data(prev_message=callback.message.message_id+1)
+    await bot.delete_messages(chat_id=callback.from_user.id, message_ids=[message_id for message_id in range(callback.message.message_id-5, callback.message.message_id+1)])
+    # await state.update_data(prev_message=callback.message.message_id)
 
     await callback.answer()
 
 @router.message(Form.name)
 async def process_name(message: types.Message, state: FSMContext):
     data = await state.get_data()
+    if data.get("prev_message"):
+        pass
+    else:
+        await state.update_data(prev_message=message.message_id-1)
+        data = await state.get_data()
     message_id = data.get("prev_message")
 
     if len(message.text) < 2:
         await message.answer(get_text(message.from_user.id, "name_error"))
+        await asyncio.sleep(3)
+        await message.delete()
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id+1)
         return
     
     await state.update_data(name=message.text)
@@ -163,6 +183,13 @@ async def process_country(message: types.Message, state: FSMContext):
 
 @router.message(Form.email)
 async def process_email(message: types.Message, state: FSMContext):
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", message.text):
+        await message.answer(get_text(message.from_user.id, "email_validation"))
+        await asyncio.sleep(3)
+        await message.delete()
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id+1)
+        return
+    
     data = await state.get_data()
     message_id = data.get("prev_message")
 
@@ -746,7 +773,6 @@ async def process_photo_right_profile_face(message: types.Message, state: FSMCon
 
     builder = InlineKeyboardBuilder()
     builder.button(text=get_text(message.from_user.id, "back_button"), callback_data="back_photo_right_profile_face")
-
     file_id = message.photo[-1].file_id
     file_name = random.randint(100000, 1000000)
     file_path = f"images/{message.from_user.id}/{file_name}.jpg"
@@ -836,3 +862,10 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
             text=get_text(message.from_user.id, "no_face_error_left"),
             reply_markup=builder.as_markup()
         )
+
+@router.message()
+async def other_message(message: types.Message, state: FSMContext):
+    await message.answer(get_text(message.from_user.id, "other_message"))
+    await asyncio.sleep(5)
+    await message.delete()
+    await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id+1)

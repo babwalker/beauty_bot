@@ -59,6 +59,8 @@ async def handle_only_one_message(count, chat_id, prev_message, state):
             reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons),
         )
         media_list = []
+        delete_message_ids = []
+        message_ids = []
         return True
     else:
         pass

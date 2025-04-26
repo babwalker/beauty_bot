@@ -14,7 +14,7 @@ bot = Bot(token=settings.BOT_TOKEN)
 async def main():
     create_table()
     dp = Dispatcher()
-    dp.include_routers(user_router, back_router, other_router, admin_router) 
+    dp.include_routers(other_router, admin_router, user_router, back_router) 
 
     await dp.start_polling(bot)
 

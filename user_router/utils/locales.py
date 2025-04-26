@@ -123,7 +123,9 @@ translations = {
         "thanks_message": (
             "Спасибо за ответы! На основе ваших предпочтений мы подобрали оптимальную программу ухода"
         ),
-        "report": "Отчет"
+        "report": "Отчет",
+        "email_validation": "Введите корректный email",
+        "other_message": "Выберите подходящий для вас вариант..."
     },
     "en": {
         "back_button": "⬅️ Back",
@@ -172,7 +174,9 @@ translations = {
         "thanks_message": (
             "Thank you for your answers! Based on your preferences, we've selected the optimal care program"
         ),
-        "report": "Report"
+        "report": "Report",
+        "email_validation": "Enter a valid email",
+        "other_message": "Choose the option that is right for you..."
     },
     "de": {
         "back_button": "⬅️ Zurück",
@@ -221,7 +225,9 @@ translations = {
         "thanks_message": (
             "Vielen Dank für Ihre Antworten! Basierend auf Ihren Präferenzen haben wir das optimale Pflegeprogramm ausgewählt"
         ),
-        "report": "Bericht"
+        "report": "Bericht",
+        "email_validation": "Geben Sie eine gültige E-Mail ein",
+        "other_message": "Wählen Sie die Option, die für Sie geeignet ist..."
     }
 }
 
