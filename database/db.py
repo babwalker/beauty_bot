@@ -26,7 +26,12 @@ def get_users(language):
 
 def get_user_language(user_id):
     cursor.execute("SELECT language FROM User WHERE user_id = ?", (user_id,))
-    return cursor.fetchone()[0]
+    result = cursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        create_user(user_id=user_id)
+        return "ru"
 
 def create_table():
     cursor.execute('''
@@ -38,5 +43,5 @@ def create_table():
 
     conn.commit()
 
-# print(get_user_language(user_id=7598687905))
+print(get_user_language(user_id=7598687905))
 # print(get_users("en")[1][0])

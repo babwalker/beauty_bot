@@ -84,8 +84,7 @@ translations = {
         "start": ru_start_message,
         "start_skin_analys": "Как тебя зовут?",
         "name_error": "Имя должно содержать минимум 2 символа. Попробуйте еще раз.",
-        "country_question": "В какой стране ты живешь? (напиши название латинскими буквами)",
-        "country_error": "Название страны должно содержать только латинские буквы.",
+        "country_question": "В какой стране ты живешь?",
         "email_question": "Укажи свой email:",
         "email_error": "Это не похоже на email. Введите корректный email.",
         "age_question": "Сколько тебе лет?",
@@ -119,7 +118,7 @@ translations = {
         "procedures_frequency_question": "Как часто вы делаете профессиональные косметологические процедуры?",
         "processing_photo": "Анализ фото...",
         "full_face": "Загружено",
-        "no_face_error_left": "Отправьте изображение с лицом (профиль слева)",
+        "no_face_error_left": "Отправьте изображение с лицом",
         "thanks_message": (
             "Спасибо за ответы! На основе ваших предпочтений мы подобрали оптимальную программу ухода"
         ),
@@ -134,8 +133,7 @@ translations = {
         "start": en_start_message,
         "start_skin_analys": "What's your name?",
         "name_error": "Name must be at least 2 characters long. Please try again.",
-        "country_question": "In which country do you live? (write in Latin letters)",
-        "country_error": "The country name must only contain Latin letters.",
+        "country_question": "In which country do you live?",
         "email_question": "Enter your email:",
         "email_error": "This doesn't look like an email. Please enter a valid one.",
         "age_question": "How old are you?",
@@ -170,7 +168,7 @@ translations = {
             "Upload a face photo for analysis - 📌 Important: "
             "The photo should be without makeup, with good lighting, left profile view."
         ),
-        "no_face_error_left": "Please send an image with a face (left profile)",
+        "no_face_error_left": "Please send an image with a face",
         "thanks_message": (
             "Thank you for your answers! Based on your preferences, we've selected the optimal care program"
         ),
@@ -185,8 +183,7 @@ translations = {
         "start": de_start_message,
         "start_skin_analys": "Wie ist Ihr Name?",
         "name_error": "Der Name muss mindestens 2 Zeichen lang sein. Bitte versuche es erneut.",
-        "country_question": "In welchem Land lebst du? (in lateinischen Buchstaben schreiben)",
-        "country_error": "Der Ländername darf nur lateinische Buchstaben enthalten.",
+        "country_question": "In welchem Land lebst du?",
         "email_question": "Gib deine E-Mail-Adresse an:",
         "email_error": "Das sieht nicht wie eine E-Mail aus. Bitte eine gültige eingeben.",
         "age_question": "Wie alt bist du?",
@@ -221,7 +218,7 @@ translations = {
             "Laden Sie ein Gesichtsfoto zur Analyse hoch - 📌 Wichtig: "
             "Das Foto sollte ohne Make-up, bei guter Beleuchtung, im linken Profil aufgenommen sein."
         ),
-        "no_face_error_left": "Bitte senden Sie ein Bild mit einem Gesicht (linkes Profil)",
+        "no_face_error_left": "Bitte senden Sie ein Bild mit einem Gesicht",
         "thanks_message": (
             "Vielen Dank für Ihre Antworten! Basierend auf Ihren Präferenzen haben wir das optimale Pflegeprogramm ausgewählt"
         ),

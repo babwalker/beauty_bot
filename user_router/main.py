@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import os
 import random
 import shutil
@@ -131,6 +132,7 @@ async def process_start(callback: types.CallbackQuery, state: FSMContext):
     await state.update_data(user_id=callback.from_user.id)
     await bot.delete_messages(chat_id=callback.from_user.id, message_ids=[message_id for message_id in range(callback.message.message_id-5, callback.message.message_id+1)])
     # await state.update_data(prev_message=callback.message.message_id)
+    logging.INFO(f"process_start - {callback.message.message_id}")
 
     await callback.answer()
 
@@ -138,10 +140,12 @@ async def process_start(callback: types.CallbackQuery, state: FSMContext):
 async def process_name(message: types.Message, state: FSMContext):
     data = await state.get_data()
     if data.get("prev_message"):
+        logging.INFO(f"process_name if true: {data.get('prev_message')}")
         pass
     else:
         await state.update_data(prev_message=message.message_id-1)
         data = await state.get_data()
+        logging.INFO(f"process_name if false: {data.get('prev_message')}")
     message_id = data.get("prev_message")
 
     if len(message.text) < 2:
@@ -738,9 +742,9 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
 
     await bot.download(file=file_id, destination=file_path)
     response = analysis_image(image_path=file_path)
+    await state.update_data(photo_full_face_id=file_name)
 
     if response["face"] == True:
-        await state.update_data(photo_full_face_id=file_name)
         await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
         await state.update_data(full_face=get_text(message.from_user.id, "full_face"))
         progress = await show_progress(state)
@@ -755,6 +759,7 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
         )
         await state.set_state(Form.photo_right_profile_face)
     else:
+        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
         os.remove(file_path)
         await bot.edit_message_text(
             message_id=prev_message,
@@ -779,9 +784,9 @@ async def process_photo_right_profile_face(message: types.Message, state: FSMCon
 
     await bot.download(file=file_id, destination=file_path)
     response = analysis_image(image_path=file_path)
+    await state.update_data(photo_right_profile_face_id=file_name)
 
     if response["face"] == True:
-        await state.update_data(photo_right_profile_face_id=file_name)
         await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
         await state.update_data(right_side_face = get_text(message.from_user.id, "full_face"))
         progress = await show_progress(state)
@@ -793,6 +798,7 @@ async def process_photo_right_profile_face(message: types.Message, state: FSMCon
         )
         await state.set_state(Form.photo_left_side_face)
     else:
+        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
         os.remove(f"images/{message.from_user.id}/{file_name}.jpg")
         await bot.edit_message_text(
             message_id=prev_message,
@@ -855,6 +861,7 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
         await state.clear()
         # await state.set_state(Form.photo_right_profile_face)
     else:
+        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
         os.remove(f"images/{message.from_user.id}/{file_name}.jpg")
         await bot.edit_message_text(
             message_id=prev_message,
