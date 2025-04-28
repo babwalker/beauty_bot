@@ -755,6 +755,7 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
         )
         await state.set_state(Form.photo_right_profile_face)
     else:
+        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
         os.remove(file_path)
         await bot.edit_message_text(
             message_id=prev_message,
@@ -793,6 +794,7 @@ async def process_photo_right_profile_face(message: types.Message, state: FSMCon
         )
         await state.set_state(Form.photo_left_side_face)
     else:
+        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
         os.remove(f"images/{message.from_user.id}/{file_name}.jpg")
         await bot.edit_message_text(
             message_id=prev_message,
@@ -855,6 +857,7 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
         await state.clear()
         # await state.set_state(Form.photo_right_profile_face)
     else:
+        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
         os.remove(f"images/{message.from_user.id}/{file_name}.jpg")
         await bot.edit_message_text(
             message_id=prev_message,
