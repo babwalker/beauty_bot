@@ -1,4 +1,5 @@
 from aiogram import Dispatcher, Bot
+import logging
 
 from config import Settings
 from database.db import create_table
@@ -21,5 +22,6 @@ async def main():
 if __name__ == "__main__":
     import asyncio
     
+    logging.basicConfig(level=logging.INFO)
     create_table()
     asyncio.run(main())
