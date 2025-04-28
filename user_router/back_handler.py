@@ -220,7 +220,8 @@ async def process_back(callback: types.CallbackQuery, state: FSMContext):
 
     elif back_to == "photo_full_face":
         data = await state.get_data()
-        os.remove(f"images/{callback.from_user.id}/{data.get("photo_full_face_id")}.jpg")
+        if os.path.exists(f"images/{callback.from_user.id}/{data.get('photo_full_face_id')}.jpg"):
+            os.remove(f"images/{callback.from_user.id}/{data.get("photo_full_face_id")}.jpg")
         await state.update_data(full_face=None)
         progress = await show_progress(state)
 
@@ -241,7 +242,8 @@ async def process_back(callback: types.CallbackQuery, state: FSMContext):
 
     elif back_to == "photo_right_profile_face":
         data = await state.get_data()
-        os.remove(f"images/{callback.from_user.id}/{data.get("photo_right_profile_face_id")}.jpg")
+        if os.path.exists(f"images/{callback.from_user.id}/{data.get('photo_right_profile_face_id')}.jpg"):
+            os.remove(f"images/{callback.from_user.id}/{data.get("photo_right_profile_face_id")}.jpg")
         await state.update_data(right_side_face=None)
         progress = await show_progress(state)
 
