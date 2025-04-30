@@ -26,6 +26,7 @@ bot = Bot(token=settings.BOT_TOKEN)
 router = Router()
 
 photo_indicator = 0 # Индикатор для проверки того что отправлено только одно фото
+image_count = 0 # Количество отправленных фото
 
 @router.callback_query(F.data.startswith("set_lang_"))
 async def set_language(callback: types.CallbackQuery, state: FSMContext):
@@ -135,6 +136,7 @@ async def process_start(callback: types.CallbackQuery, state: FSMContext):
     await bot.delete_messages(chat_id=callback.from_user.id, message_ids=[message_id for message_id in range(callback.message.message_id-5, callback.message.message_id+1)])
     # await state.update_data(prev_message=callback.message.message_id)
     logging.info(f"process_start - {callback.message.message_id}")
+    logging.info(callback.message.from_user.id)
 
     await callback.answer()
 
@@ -148,6 +150,7 @@ async def process_name(message: types.Message, state: FSMContext):
         await state.update_data(prev_message=message.message_id-1)
         data = await state.get_data()
         logging.info(f"process_name if false: {data.get('prev_message')}")
+    logging.info(message.from_user.id)
     message_id = data.get("prev_message")
 
     if len(message.text) < 2:
@@ -723,18 +726,28 @@ async def process_composition_done(callback: types.CallbackQuery, state: FSMCont
 
 @router.message(F.content_type == types.ContentType.PHOTO, Form.photo_full_face)
 async def process_photo_full_face(message: types.Message, state: FSMContext):
-    global photo_indicator
-
-    if photo_indicator == 1:
+    # Получаем текущее состояние
+    data = await state.get_data()
+    
+    # Инициализируем счетчики, если их нет
+    if "photo_indicator" not in data:
+        await state.update_data(photo_indicator=0)
+    if "image_count" not in data:
+        await state.update_data(image_count=0)
+    
+    # Обновляем счетчик
+    data["image_count"] += 1
+    
+    # Проверяем индикатор
+    if data["photo_indicator"] == 1:
         await message.delete()
         return
-    else:
-        photo_indicator = 1
-    await message.delete()
-    photo_indicator = 0
-    await message.answer(text=get_text(message.from_user.id, "processing_photo"))
-    await state.update_data(additional_message=message.message_id+1)
+    
+    # Блокируем обработку для других фото
+    await state.update_data(photo_indicator=1)
+    await state.update_data(additional_message=message.message_id+data["image_count"])
     data = await state.get_data()
+    await message.answer(text=get_text(message.from_user.id, "processing_photo"))
     prev_message = data.get("prev_message")
 
     builder = InlineKeyboardBuilder()
