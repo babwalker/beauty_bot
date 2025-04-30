@@ -25,9 +25,6 @@ bot = Bot(token=settings.BOT_TOKEN)
 
 router = Router()
 
-photo_indicator = 0 # Индикатор для проверки того что отправлено только одно фото
-image_count = 0 # Количество отправленных фото
-
 @router.callback_query(F.data.startswith("set_lang_"))
 async def set_language(callback: types.CallbackQuery, state: FSMContext):
     language = callback.data.split("_")[2] 
@@ -724,31 +721,29 @@ async def process_composition_done(callback: types.CallbackQuery, state: FSMCont
     await state.set_state(Form.photo_full_face)
     await callback.answer()
 
+@router.message(Command("test"))
+async def test(message: types.Message, state: FSMContext):
+    await message.answer("test")
+    await state.set_state(Form.photo_full_face)
+
 @router.message(F.content_type == types.ContentType.PHOTO, Form.photo_full_face)
 async def process_photo_full_face(message: types.Message, state: FSMContext):
-    # Получаем текущее состояние
-    data = await state.get_data()
-    
-    # Инициализируем счетчики, если их нет
-    if "photo_indicator" not in data:
-        await state.update_data(photo_indicator=0)
+    data = await state.get_data()  # Перечитываем обновленные данные
+    if data.get("error_message"):
+        await message.delete(data.get("error_message"))
+        await state.update_data(error_message=None)
     if "image_count" not in data:
         await state.update_data(image_count=0)
+        data = await state.get_data()
     
-    # Обновляем счетчик
-    data["image_count"] += 1
-    
-    # Проверяем индикатор
-    if data["photo_indicator"] == 1:
-        await message.delete()
+    # Увеличиваем счетчик и сохраняем
+    new_count = data["image_count"] + 1
+    await state.update_data(image_count=new_count)
+    await message.delete()
+    if data.get("image_count") > 0:
         return
-    
-    # Блокируем обработку для других фото
-    await state.update_data(photo_indicator=1)
-    await state.update_data(additional_message=message.message_id+data["image_count"])
-    data = await state.get_data()
+
     await message.answer(text=get_text(message.from_user.id, "processing_photo"))
-    prev_message = data.get("prev_message")
 
     builder = InlineKeyboardBuilder()
     builder.button(
@@ -766,9 +761,11 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
     await bot.download(file=file_id, destination=file_path)
     response = analysis_image(image_path=file_path)
     await state.update_data(photo_full_face_id=file_name)
+    data = await state.get_data()
+    prev_message = data.get("prev_message")
 
     if response["face"] == True:
-        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")))
         await state.update_data(full_face=get_text(message.from_user.id, "full_face"))
         progress = await show_progress(state)
         await bot.edit_message_text(
@@ -780,23 +777,36 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
             ),
             reply_markup=builder.as_markup()
         )
+        await state.update_data(image_count=0)
         await state.set_state(Form.photo_right_profile_face)
+        await message.answer("✅")
+        await asyncio.sleep(2)
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")) + 1)
     else:
-        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
-        os.remove(file_path)
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")))
         await message.answer(get_text(message.from_user.id, "no_face_error"))
-        # await bot.edit_message_text(
-        #     message_id=prev_message,
-        #     chat_id=message.chat.id,
-        #     text=get_text(message.from_user.id, "no_face_error"),
-        #     reply_markup=builder.as_markup()
-        # )
+        os.remove(f"images/{message.from_user.id}/{file_name}.jpg")
+        await state.update_data(error_message=message.message_id + int(data.get("image_count")) + 1)
+        await state.update_data(image_count=0)
 
 @router.message(F.content_type == types.ContentType.PHOTO, Form.photo_right_profile_face)
 async def process_photo_right_profile_face(message: types.Message, state: FSMContext):
+    data = await state.get_data()  # Перечитываем обновленные данные
+    if data.get("error_message"):
+        await message.delete(data.get("error_message"))
+        await state.update_data(error_message=None)
+    if "image_count" not in data:
+        await state.update_data(image_count=0)
+        data = await state.get_data()
+    
+    # Увеличиваем счетчик и сохраняем
+    new_count = data["image_count"] + 1
+    await state.update_data(image_count=new_count)
     await message.delete()
+    if data["image_count"] > 0:
+        return
+    
     await message.answer(text=get_text(message.from_user.id, "processing_photo"))
-    await state.update_data(additional_message=message.message_id+1)
     data = await state.get_data()
     prev_message = data.get("prev_message")
 
@@ -811,7 +821,7 @@ async def process_photo_right_profile_face(message: types.Message, state: FSMCon
     await state.update_data(photo_right_profile_face_id=file_name)
 
     if response["face"] == True:
-        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")))
         await state.update_data(right_side_face = get_text(message.from_user.id, "full_face"))
         progress = await show_progress(state)
         await bot.edit_message_text(
@@ -820,22 +830,36 @@ async def process_photo_right_profile_face(message: types.Message, state: FSMCon
             text=f"{progress}\n\n{get_text(message.from_user.id, "upload_left_profile_photo")}",
             reply_markup=builder.as_markup()
         )
+        await state.update_data(image_count=0)
         await state.set_state(Form.photo_left_side_face)
+        await message.answer("✅")
+        await asyncio.sleep(2)
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")) + 1)
     else:
-        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")))
+        await message.answer(get_text(message.from_user.id, "no_face_error"))
         os.remove(f"images/{message.from_user.id}/{file_name}.jpg")
-        await bot.edit_message_text(
-            message_id=prev_message,
-            chat_id=message.chat.id,
-            text=get_text(message.from_user.id, "no_face_error_left"),
-            reply_markup=builder.as_markup()
-        )
+        await state.update_data(error_message=message.message_id + int(data.get("image_count")) + 1)
+        await state.update_data(image_count=0)
 
 @router.message(F.content_type == types.ContentType.PHOTO, Form.photo_left_side_face)
 async def process_photo_left_side_face(message: types.Message, state: FSMContext):
+    data = await state.get_data()  # Перечитываем обновленные данные
+    if data.get("error_message"):
+        await message.delete(data.get("error_message"))
+        await state.update_data(error_message=None)
+    if "image_count" not in data:
+        await state.update_data(image_count=0)
+        data = await state.get_data()
+    
+    # Увеличиваем счетчик и сохраняем
+    new_count = data["image_count"] + 1
+    await state.update_data(image_count=new_count)
     await message.delete()
+    if data["image_count"] > 0:
+        return
+    
     await message.answer(text=get_text(message.from_user.id, "processing_photo"))
-    await state.update_data(additional_message=message.message_id+1)
     data = await state.get_data()
     prev_message = data.get("prev_message")
 
@@ -871,7 +895,7 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
         get_docx_file(data=summary_report, user_id=message.from_user.id, state_data=data)
         document = FSInputFile(path=f"images/{message.from_user.id}/{get_text(user_id=message.from_user.id, key="report")}.docx")
 
-        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")))
 
         await bot.edit_message_text(
             message_id=prev_message,
@@ -885,15 +909,11 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
         await state.clear()
         # await state.set_state(Form.photo_right_profile_face)
     else:
-        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
-        os.remove(f"images/{message.from_user.id}/{file_name}.jpg")
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")))
         await message.answer(get_text(message.from_user.id, "no_face_error"))
-        # await bot.edit_message_text(
-        #     message_id=prev_message,
-        #     chat_id=message.chat.id,
-        #     text=get_text(message.from_user.id, "no_face_error_left"),
-        #     reply_markup=builder.as_markup()
-        # )
+        os.remove(f"images/{message.from_user.id}/{file_name}.jpg")
+        await state.update_data(error_message=message.message_id + int(data.get("image_count")) + 1)
+        await state.update_data(image_count=0)
 
 @router.message()
 async def other_message(message: types.Message, state: FSMContext):
