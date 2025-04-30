@@ -723,6 +723,8 @@ async def process_composition_done(callback: types.CallbackQuery, state: FSMCont
 
 @router.message(F.content_type == types.ContentType.PHOTO, Form.photo_full_face)
 async def process_photo_full_face(message: types.Message, state: FSMContext):
+    global photo_indicator
+
     if photo_indicator == 1:
         await message.delete()
         return
