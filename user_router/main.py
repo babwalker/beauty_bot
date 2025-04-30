@@ -133,6 +133,7 @@ async def process_start(callback: types.CallbackQuery, state: FSMContext):
     await bot.delete_messages(chat_id=callback.from_user.id, message_ids=[message_id for message_id in range(callback.message.message_id-5, callback.message.message_id+1)])
     # await state.update_data(prev_message=callback.message.message_id)
     logging.info(f"process_start - {callback.message.message_id}")
+    logging.info(callback.message.from_user.id)
 
     await callback.answer()
 
@@ -146,6 +147,7 @@ async def process_name(message: types.Message, state: FSMContext):
         await state.update_data(prev_message=message.message_id-1)
         data = await state.get_data()
         logging.info(f"process_name if false: {data.get('prev_message')}")
+    logging.info(message.from_user.id)
     message_id = data.get("prev_message")
 
     if len(message.text) < 2:
