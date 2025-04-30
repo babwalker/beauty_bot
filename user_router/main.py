@@ -25,6 +25,8 @@ bot = Bot(token=settings.BOT_TOKEN)
 
 router = Router()
 
+photo_indicator = 0 # Индикатор для проверки того что отправлено только одно фото
+
 @router.callback_query(F.data.startswith("set_lang_"))
 async def set_language(callback: types.CallbackQuery, state: FSMContext):
     language = callback.data.split("_")[2] 
@@ -721,7 +723,13 @@ async def process_composition_done(callback: types.CallbackQuery, state: FSMCont
 
 @router.message(F.content_type == types.ContentType.PHOTO, Form.photo_full_face)
 async def process_photo_full_face(message: types.Message, state: FSMContext):
+    if photo_indicator == 1:
+        await message.delete()
+        return
+    else:
+        photo_indicator = 1
     await message.delete()
+    photo_indicator = 0
     await message.answer(text=get_text(message.from_user.id, "processing_photo"))
     await state.update_data(additional_message=message.message_id+1)
     data = await state.get_data()
@@ -761,12 +769,13 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
     else:
         await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
         os.remove(file_path)
-        await bot.edit_message_text(
-            message_id=prev_message,
-            chat_id=message.chat.id,
-            text=get_text(message.from_user.id, "no_face_error"),
-            reply_markup=builder.as_markup()
-        )
+        await message.answer(get_text(message.from_user.id, "no_face_error"))
+        # await bot.edit_message_text(
+        #     message_id=prev_message,
+        #     chat_id=message.chat.id,
+        #     text=get_text(message.from_user.id, "no_face_error"),
+        #     reply_markup=builder.as_markup()
+        # )
 
 @router.message(F.content_type == types.ContentType.PHOTO, Form.photo_right_profile_face)
 async def process_photo_right_profile_face(message: types.Message, state: FSMContext):
@@ -863,12 +872,13 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
     else:
         await bot.delete_message(chat_id=message.chat.id, message_id=data.get("additional_message"))
         os.remove(f"images/{message.from_user.id}/{file_name}.jpg")
-        await bot.edit_message_text(
-            message_id=prev_message,
-            chat_id=message.chat.id,
-            text=get_text(message.from_user.id, "no_face_error_left"),
-            reply_markup=builder.as_markup()
-        )
+        await message.answer(get_text(message.from_user.id, "no_face_error"))
+        # await bot.edit_message_text(
+        #     message_id=prev_message,
+        #     chat_id=message.chat.id,
+        #     text=get_text(message.from_user.id, "no_face_error_left"),
+        #     reply_markup=builder.as_markup()
+        # )
 
 @router.message()
 async def other_message(message: types.Message, state: FSMContext):
