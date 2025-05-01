@@ -9,6 +9,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.types import InlineKeyboardButton, InputMediaVideo, InputMediaPhoto
 from aiogram.types.input_file import FSInputFile
+from aiogram.enums import ParseMode
 
 import re
 
@@ -717,7 +718,7 @@ async def process_composition_done(callback: types.CallbackQuery, state: FSMCont
         f"{get_text(callback.from_user.id, 'upload_full_face_photo')}"
     )
     
-    await callback.message.edit_text(response, reply_markup=builder.as_markup())
+    await callback.message.edit_text(response, reply_markup=builder.as_markup(), parse_mode=ParseMode.HTML)
     await state.set_state(Form.photo_full_face)
     await callback.answer()
 
@@ -775,7 +776,8 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
                 f"{progress}\n\n"
                 f"{get_text(message.from_user.id, 'upload_right_profile_photo')}"
             ),
-            reply_markup=builder.as_markup()
+            reply_markup=builder.as_markup(),
+            parse_mode=ParseMode.HTML
         )
         await state.update_data(image_count=0)
         await state.set_state(Form.photo_right_profile_face)
@@ -828,7 +830,8 @@ async def process_photo_right_profile_face(message: types.Message, state: FSMCon
             message_id=prev_message,
             chat_id=message.chat.id,
             text=f"{progress}\n\n{get_text(message.from_user.id, "upload_left_profile_photo")}",
-            reply_markup=builder.as_markup()
+            reply_markup=builder.as_markup(),
+            parse_mode=ParseMode.HTML
         )
         await state.update_data(image_count=0)
         await state.set_state(Form.photo_left_side_face)
@@ -874,6 +877,8 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
     response = analysis_image(image_path=file_path)
 
     if response["face"] == True:
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")))
+        await message.answer(text=get_text(message.from_user.id, key="processing_care_program"))
         await state.update_data(left_side_face = get_text(message.from_user.id, "full_face"))
         data = await state.get_data()
         progress = await show_progress(state)
@@ -895,7 +900,7 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
         get_docx_file(data=summary_report, user_id=message.from_user.id, state_data=data)
         document = FSInputFile(path=f"images/{message.from_user.id}/{get_text(user_id=message.from_user.id, key="report")}.docx")
 
-        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")))
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")) + 1)
 
         await bot.edit_message_text(
             message_id=prev_message,

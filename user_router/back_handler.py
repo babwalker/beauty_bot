@@ -2,6 +2,7 @@ import os
 from aiogram import types, F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.enums import ParseMode
 
 from user_router.utils.service import get_text, show_progress, get_back_button, get_inline_text
 from user_router.utils.inline_buttons_data import AGES, BUDGET_OPTIONS, COMPOSITION_PREFERENCES, DAILY_PRODUCTS, GENDERS, PROCEDURES_FREQUENCY, SKIN_TYPES, SKIN_FEATURES, LIFESTYLES, WATER_OPTIONS, SKIN_PROBLEMS
@@ -236,7 +237,7 @@ async def process_back(callback: types.CallbackQuery, state: FSMContext):
             f"{get_text(callback.from_user.id, 'upload_full_face_photo')}"
         )
         
-        await callback.message.edit_text(response, reply_markup=builder.as_markup())
+        await callback.message.edit_text(response, reply_markup=builder.as_markup(), parse_mode=ParseMode.HTML)
         await state.set_state(Form.photo_full_face)
         await callback.answer()
 
@@ -258,6 +259,6 @@ async def process_back(callback: types.CallbackQuery, state: FSMContext):
             f"{get_text(callback.from_user.id, 'upload_right_profile_photo')}"
         )
         
-        await callback.message.edit_text(response, reply_markup=builder.as_markup())
+        await callback.message.edit_text(response, reply_markup=builder.as_markup(), parse_mode=ParseMode.HTML)
         await state.set_state(Form.photo_right_profile_face)
         await callback.answer()

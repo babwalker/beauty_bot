@@ -102,15 +102,15 @@ translations = {
         "composition_question": "Есть ли у вас пожелания по составу косметики?",
         "upload_full_face_photo": (
             "Загрузите фото лица для анализа - 📌 Важно: "
-            "Фото должно быть сделано без макияжа, при хорошем освещении, анфас."
+            "Фото должно быть сделано без макияжа, при хорошем освещении, <b>анфас</b>."
         ),
         "upload_right_profile_photo": (
             "Загрузите фото лица для анализа - 📌 Важно: "
-            "Фото должно быть сделано без макияжа, при хорошем освещении, профиль справа"
+            "Фото должно быть сделано без макияжа, при хорошем освещении, профиль <b>справа</b>"
         ),
         "upload_left_profile_photo": (
             "Загрузите фото лица для анализа - 📌 Важно: "
-            "Фото должно быть сделано без макияжа, при хорошем освещении, профиль слева."
+            "Фото должно быть сделано без макияжа, при хорошем освещении, профиль <b>слева</b>."
         ),
         "no_face_error": "Отправьте изображение с лицом",
         "other_skin_problems": "Укажите другие проблемы кожи:",
@@ -124,7 +124,8 @@ translations = {
         ),
         "report": "Отчет",
         "email_validation": "Введите корректный email",
-        "other_message": "Выберите подходящий для вас вариант..."
+        "other_message": "Выберите подходящий для вас вариант...",
+        "processing_care_program": "Написание программы ухода…"
     },
     "en": {
         "back_button": "⬅️ Back",
@@ -151,11 +152,11 @@ translations = {
         "composition_question": "Do you have any preferences regarding cosmetic ingredients?",
         "upload_full_face_photo": (
             "Upload a photo of your face for analysis - 📌 Important: "
-            "The photo should be taken without makeup, with good lighting, and face forward."
+            "The photo should be taken without makeup, with good lighting, and <b>face forward</b>."
         ),
         "upload_right_profile_photo": (
             "Upload a profile photo for analysis - 📌 Important: "
-            "The photo should be taken without makeup, with good lighting, right side profile."
+            "The photo should be taken without makeup, with good lighting, <b>right side profile</b>."
         ),
         "no_face_error": "Please send an image containing a face",
         "gender_question": "Specify your gender:",
@@ -166,7 +167,7 @@ translations = {
         "full_face": "Uploaded",
         "upload_left_profile_photo": (
             "Upload a face photo for analysis - 📌 Important: "
-            "The photo should be without makeup, with good lighting, left profile view."
+            "The photo should be without makeup, with good lighting, <b>left profile view</b>."
         ),
         "no_face_error_left": "Please send an image with a face",
         "thanks_message": (
@@ -174,7 +175,8 @@ translations = {
         ),
         "report": "Report",
         "email_validation": "Enter a valid email",
-        "other_message": "Choose the option that is right for you..."
+        "other_message": "Choose the option that is right for you...",
+        "processing_care_program": "Writing a nursing program..."
     },
     "de": {
         "back_button": "⬅️ Zurück",
@@ -201,11 +203,11 @@ translations = {
         "composition_question": "Hast du Wünsche bezüglich der Inhaltsstoffe?",
         "upload_full_face_photo": (
             "Lade ein Foto deines Gesichts zur Analyse hoch – 📌 Wichtig: "
-            "Das Foto sollte ohne Make-up, bei guter Beleuchtung und frontal aufgenommen werden."
+            "Das Foto sollte ohne Make-up, bei guter Beleuchtung und <b>frontal aufgenommen werden</b>"
         ),
         "upload_right_profile_photo": (
             "Lade ein Profilfoto zur Analyse hoch – 📌 Wichtig: "
-            "Das Foto sollte ohne Make-up, bei guter Beleuchtung und im rechten Profil aufgenommen werden."
+            "Das Foto sollte ohne Make-up, bei guter Beleuchtung und <b>im rechten Profil aufgenommen werden</b>"
         ),
         "no_face_error": "Bitte sende ein Bild mit einem Gesicht",
         "gender_question": "Gib dein Geschlecht an:",
@@ -216,7 +218,7 @@ translations = {
         "full_face": "Hochgeladen",
         "upload_left_profile_photo": (
             "Laden Sie ein Gesichtsfoto zur Analyse hoch - 📌 Wichtig: "
-            "Das Foto sollte ohne Make-up, bei guter Beleuchtung, im linken Profil aufgenommen sein."
+            "Das Foto sollte ohne Make-up, bei guter Beleuchtung, <b>im linken Profil aufgenommen sein</b>"
         ),
         "no_face_error_left": "Bitte senden Sie ein Bild mit einem Gesicht",
         "thanks_message": (
@@ -224,7 +226,8 @@ translations = {
         ),
         "report": "Bericht",
         "email_validation": "Geben Sie eine gültige E-Mail ein",
-        "other_message": "Wählen Sie die Option, die für Sie geeignet ist..."
+        "other_message": "Wählen Sie die Option, die für Sie geeignet ist...",
+        "processing_care_program": "Ein Pflegeprogramm schreiben..."
     }
 }
 
