@@ -30,7 +30,7 @@ async def process_back(callback: types.CallbackQuery, state: FSMContext):
             f"{progress}\n\n{get_text(user_id, 'country_question')}",
             reply_markup=get_back_button("name", user_id=user_id)
         )
-        await state.set_state(Form.age)
+        await state.set_state(Form.country)
 
     # elif back_to == "email":
     #     await callback.message.edit_text(
