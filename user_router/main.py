@@ -44,20 +44,6 @@ async def set_language(callback: types.CallbackQuery, state: FSMContext):
         text=get_inline_text(callback.from_user.id, "START_BUTTON", "skin_analys"),
         callback_data="start"
     )
-    builder.button(
-        text=get_inline_text(callback.from_user.id, "START_BUTTON", "learn_more"),
-        url="https://www.instagram.com/beauty.akademy.world?igsh=NTc4MTIwNjQ2YQ=="
-    )
-
-    builder.button(
-        text=get_inline_text(callback.from_user.id, "START_BUTTON", "get_consultation"),
-        url="https://www.instagram.com/beauty.akademy.world?igsh=NTc4MTIwNjQ2YQ=="
-    )
-
-    builder.button(
-        text=get_inline_text(callback.from_user.id, "START_BUTTON", "ask_question"),
-        url="https://www.instagram.com/beauty.akademy.world?igsh=NTc4MTIwNjQ2YQ=="
-    )
 
     for language in language_list.keys():
         if user_language != language:
@@ -70,7 +56,7 @@ async def set_language(callback: types.CallbackQuery, state: FSMContext):
     builder.adjust(1)
 
     await state.clear()
-    await callback.message.edit_text(get_text(callback.from_user.id, "start"), reply_markup=builder.as_markup())
+    await callback.message.edit_caption(caption=get_text(callback.from_user.id, "start"), reply_markup=builder.as_markup())
 
 @router.message(Command("start"))
 async def start(message: types.Message, state: FSMContext):
@@ -88,20 +74,6 @@ async def start(message: types.Message, state: FSMContext):
         text=get_inline_text(message.from_user.id, "START_BUTTON", "skin_analys"),
         callback_data="start"
     )
-    builder.button(
-        text=get_inline_text(message.from_user.id, "START_BUTTON", "learn_more"),
-        url="https://www.instagram.com/beauty.akademy.world?igsh=NTc4MTIwNjQ2YQ=="
-    )
-
-    builder.button(
-        text=get_inline_text(message.from_user.id, "START_BUTTON", "get_consultation"),
-        url="https://www.instagram.com/beauty.akademy.world?igsh=NTc4MTIwNjQ2YQ=="
-    )
-
-    builder.button(
-        text=get_inline_text(message.from_user.id, "START_BUTTON", "ask_question"),
-        url="https://www.instagram.com/beauty.akademy.world?igsh=NTc4MTIwNjQ2YQ=="
-    )
 
     for language in language_list.keys():
         if user_language != language:
@@ -113,26 +85,20 @@ async def start(message: types.Message, state: FSMContext):
             )
     builder.adjust(1)
 
-    media_list = [
-        InputMediaPhoto(media="AgACAgIAAxkBAAIZ_2gMtyaTKwVU27HaZB-M8NZPpHxYAAJo8TEb-SppSN1U5IpeWc4FAQADAgADeQADNgQ"),
-        InputMediaPhoto(media="AgACAgIAAxkBAAIaAAFoDLcmL5s9Q-TfoZWBWSH6GE4k1QACafExG_kqaUhAdGU7tfJX9QEAAwIAA3kAAzYE"),
-        InputMediaVideo(media="BAACAgIAAxkBAAIaAmgMt4FlNJiIM4XXKbt14TfMrRvQAAJ0fAAC-SppSOE-VCp2TCWENgQ"),
-        InputMediaVideo(media="BAACAgIAAxkBAAIaA2gMt4G56VfI1mpjqSlcTNfltjmWAAJ1fAAC-SppSL1p7Jofpy1PNgQ"),
-        InputMediaVideo(media="BAACAgIAAxkBAAIaBGgMt4HPnlerB9WqK4Bq0PqfDTv5AAJ2fAAC-SppSIO-3pZpCxAmNgQ"),
-    ]
-
     await state.clear()
     await message.delete()
-    await message.answer_media_group(media=media_list)
-    await message.answer(get_text(message.from_user.id, "start"), reply_markup=builder.as_markup())
+    await message.answer_video(
+        video="BAACAgIAAxkBAAIaA2gMt4G56VfI1mpjqSlcTNfltjmWAAJ1fAAC-SppSL1p7Jofpy1PNgQ", 
+        caption=get_text(message.from_user.id, "start"),
+        reply_markup=builder.as_markup()
+    )
 
 @router.callback_query(F.data == "start")
 async def process_start(callback: types.CallbackQuery, state: FSMContext):
+    await callback.message.delete()
     await callback.message.answer(get_text(user_id=callback.from_user.id, key="start_skin_analys"))
     await state.set_state(Form.name)
     await state.update_data(user_id=callback.from_user.id)
-    await bot.delete_messages(chat_id=callback.from_user.id, message_ids=[message_id for message_id in range(callback.message.message_id-5, callback.message.message_id+1)])
-    # await state.update_data(prev_message=callback.message.message_id)
     logging.info(f"process_start - {callback.message.message_id}")
     logging.info(callback.message.from_user.id)
 
@@ -179,35 +145,11 @@ async def process_country(message: types.Message, state: FSMContext):
     await state.update_data(country=message.text)
     progress = await show_progress(state)
 
-    await bot.edit_message_text(
-        chat_id=message.chat.id,
-        message_id=message_id,
-        text=f"{progress}\n\n{get_text(message.from_user.id, 'email_question')}",
-        reply_markup=get_back_button("country", user_id=message.from_user.id)
-    )
-    await message.delete()
-    await state.set_state(Form.email)
-
-@router.message(Form.email)
-async def process_email(message: types.Message, state: FSMContext):
-    if not re.match(r"[^@]+@[^@]+\.[^@]+", message.text):
-        await message.answer(get_text(message.from_user.id, "email_validation"))
-        await asyncio.sleep(3)
-        await message.delete()
-        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id+1)
-        return
-    
-    data = await state.get_data()
-    message_id = data.get("prev_message")
-
-    await state.update_data(email=message.text)
-    progress = await show_progress(state)
-
     builder = InlineKeyboardBuilder()
     for key in AGES:
         text = get_inline_text(message.from_user.id, "AGES", key)
         builder.button(text=text, callback_data=f"age_{key}")
-    builder.button(text=get_text(message.from_user.id, "back_button"), callback_data="back_email")
+    builder.button(text=get_text(message.from_user.id, "back_button"), callback_data="back_country")
     builder.adjust(2)
 
     await bot.edit_message_text(
@@ -218,6 +160,37 @@ async def process_email(message: types.Message, state: FSMContext):
     )
     await message.delete()
     await state.set_state(Form.age)
+
+# @router.message(Form.email)
+# async def process_email(message: types.Message, state: FSMContext):
+#     # if not re.match(r"[^@]+@[^@]+\.[^@]+", message.text):
+#     #     await message.answer(get_text(message.from_user.id, "email_validation"))
+#     #     await asyncio.sleep(3)
+#     #     await message.delete()
+#     #     await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id+1)
+#     #     return
+    
+#     data = await state.get_data()
+#     message_id = data.get("prev_message")
+
+#     await state.update_data(email=message.text)
+#     progress = await show_progress(state)
+
+#     builder = InlineKeyboardBuilder()
+#     for key in AGES:
+#         text = get_inline_text(message.from_user.id, "AGES", key)
+#         builder.button(text=text, callback_data=f"age_{key}")
+#     builder.button(text=get_text(message.from_user.id, "back_button"), callback_data="back_email")
+#     builder.adjust(2)
+
+#     await bot.edit_message_text(
+#         chat_id=message.chat.id,
+#         message_id=message_id,
+#         text=f"{progress}\n\n{get_text(message.from_user.id, 'age_question')}",
+#         reply_markup=builder.as_markup()
+#     )
+#     await message.delete()
+#     await state.set_state(Form.age)
 
 
 @router.callback_query(F.data.startswith("age_"))
@@ -676,11 +649,17 @@ async def update_composition_keyboard(message: types.Message, state: FSMContext)
     
     builder = InlineKeyboardBuilder()
     for key in COMPOSITION_PREFERENCES:
+        if key == "no-preference": continue
         emoji = "✅" if get_inline_text(message.chat.id, "COMPOSITION_PREFERENCES", key) in selected_prefs else "◻️"
         builder.button(
             text=f"{emoji} {get_inline_text(message.chat.id, 'COMPOSITION_PREFERENCES', key)}",
             callback_data=f"composition_{key}"
         )
+
+    builder.button(
+        text=get_inline_text(message.chat.id, "COMPOSITION_PREFERENCES", "no-preference"),
+        callback_data="no_preferenece"
+    )
     
     builder.button(
         text=get_text(message.chat.id, "done_button"),
@@ -696,6 +675,29 @@ async def update_composition_keyboard(message: types.Message, state: FSMContext)
         f"{progress}\n\n{get_text(message.chat.id, 'composition_question')}",
         reply_markup=builder.as_markup()
     )
+
+#Обработчик выбора косметики без предпочтений
+@router.callback_query(F.data == "no_preferenece", Form.composition_preferences)
+async def process_no_preference(callback: types.CallbackQuery, state: FSMContext):
+    await state.update_data(selected_prefs=[])
+    await state.update_data(selected_prefs=get_inline_text(callback.from_user.id, "COMPOSITION_PREFERENCES", "no-preference"))
+
+    progress = await show_progress(state)
+
+    builder = InlineKeyboardBuilder()
+    builder.button(
+        text=get_text(callback.from_user.id, "back_button"),
+        callback_data="back_composition"
+    )
+    
+    response = (
+        f"{progress}\n\n"
+        f"{get_text(callback.from_user.id, 'upload_full_face_photo')}"
+    )
+    
+    await callback.message.edit_text(response, reply_markup=builder.as_markup(), parse_mode=ParseMode.HTML)
+    await state.set_state(Form.photo_full_face)
+    await callback.answer()
 
 # Обработчик завершения выбора состава
 @router.callback_query(F.data == "done_composition", Form.composition_preferences)
@@ -885,7 +887,7 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
         
         response = (
             # f"{progress}\n\n"
-            get_text(message.from_user.id, "thanks_message")
+            get_text(message.from_user.id, "final_report_message")
         )
         
         builder = InlineKeyboardBuilder()
@@ -906,7 +908,7 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
                     break
                 else:
                     await asyncio.sleep(60)
-        document = FSInputFile(path=f"images/{message.from_user.id}/{get_text(user_id=message.from_user.id, key="report")}.docx")
+        document = FSInputFile(path=f"images/{message.from_user.id}/{get_text(user_id=message.from_user.id, key="report")}.pdf")
 
         await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")) + 1)
 
@@ -920,6 +922,8 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
 
         shutil.rmtree(f"images/{message.from_user.id}")
         await state.clear()
+        await asyncio.sleep(60)
+        await message.answer(get_text(message.from_user.id, "final_message"))
         # await state.set_state(Form.photo_right_profile_face)
     else:
         await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")))

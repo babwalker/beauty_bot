@@ -2,9 +2,6 @@ inline_translations = {
     "ru": {
         "START_BUTTON": {
             "skin_analys": "Пройти skin-анализ",
-            "learn_more": "Узнать больше об уходе за кожей",
-            "get_consultation": "Получить консультацию от косметолога",
-            "ask_question": "Задать вопрос"
         },
         "AGES": {
             "under20": "до 20",
@@ -89,10 +86,7 @@ inline_translations = {
 
     "en": {
         "START_BUTTON": {
-            "skin_analys": "Start skin analysis",
-            "learn_more": "Learn more about skincare",
-            "get_consultation": "Get a consultation with a cosmetologist",
-            "ask_question": "Ask a question"
+            "skin_analys": "Start skin analysis"
         },
         "AGES": {
             "under20": "under 20",
@@ -177,10 +171,7 @@ inline_translations = {
 
     "de": {
         "START_BUTTON": {
-            "skin_analys": "Starten Sie die Hautanalyse",
-            "learn_more": "Mehr über Hautpflege erfahren",
-            "get_consultation": "Eine Beratung vom Kosmetologen erhalten",
-            "ask_question": "Eine Frage stellen"
+            "skin_analys": "Starten Sie die Hautanalyse"
         },
         "AGES": {
             "under20": "unter 20",

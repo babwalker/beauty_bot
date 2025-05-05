@@ -13,15 +13,6 @@ ru_start_message = """
 
 🎥 Посмотрите короткое видео, как работает онлайн-анализ кожи:  
 [🔗 Видео 1 — Как проходит skin-анализ]
-
-🎥 А также видео с отзывом клиента:  
-[🔗 Видео 2 — Отзыв студентки об онлайн-косметологе]
-
-👇 Что вас интересует?
-1️⃣ Пройти skin-анализ  
-2️⃣ Узнать больше об уходе за кожей  
-3️⃣ Получить консультацию от косметолога  
-4️⃣ Задать вопрос
 """
 
 en_start_message = """
@@ -39,15 +30,6 @@ and we'll prepare a personalized care plan for you: morning, evening, and for th
 
 🎥 Watch a short video on how online skin analysis works:  
 [🔗 Video 1 - How Skin Analysis Works]
-
-🎥 And also a client testimonial video:  
-[🔗 Video 2 - Student's Review of Online Cosmetologist].
-
-👇 What are you interested in?
-1️⃣ Get a skin analysis  
-2️⃣ Learn more about skin care  
-3️⃣ Get a consultation from a cosmetologist  
-4️⃣ Ask a question
 """
 
 de_start_message = """
@@ -65,15 +47,6 @@ und wir erstellen einen persönlichen Pflegeplan für Sie: morgens, abends und f
 
 🎥 Sehen Sie in einem kurzen Video, wie die Online-Hautanalyse funktioniert:  
 [🔗 Video 1 - Wie die Hautanalyse funktioniert]
-
-🎥 Und auch ein Video mit Kundenaussagen:  
-[🔗 Video 2 - Student's Review of Online Cosmetologist].
-
-👇 Woran sind Sie interessiert?
-1️⃣ Eine Hautanalyse erhalten  
-2️⃣ Mehr über Hautpflege erfahren  
-3️⃣ Lassen Sie sich von einer Kosmetikerin beraten  
-4️⃣ Eine Frage stellen
 """
 
 translations = {
@@ -119,13 +92,14 @@ translations = {
         "processing_photo": "Анализ фото...",
         "full_face": "Загружено",
         "no_face_error_left": "Отправьте изображение с лицом",
-        "thanks_message": (
-            "Спасибо за ответы! На основе ваших предпочтений мы подобрали оптимальную программу ухода"
+        "final_report_message": (
+            "👩‍🏫 Спросить консультанта бьюти мастеров по всем вопросам"
         ),
         "report": "Отчет",
         "email_validation": "Введите корректный email",
         "other_message": "Выберите подходящий для вас вариант...",
-        "processing_care_program": "Написание программы ухода…"
+        "processing_care_program": "Пожалуйста, подождите, мы готовим для вас персональный отчет...",
+        "final_message": "Спасибо за участие! Желаем вам успехов и здоровья вашей коже 🌿"
     },
     "en": {
         "back_button": "⬅️ Back",
@@ -170,13 +144,14 @@ translations = {
             "The photo should be without makeup, with good lighting, <b>left profile view</b>."
         ),
         "no_face_error_left": "Please send an image with a face",
-        "thanks_message": (
-            "Thank you for your answers! Based on your preferences, we've selected the optimal care program"
+        "final_report_message": (
+            "👩‍🏫 Ask a Beauty Masters consultant for all your questions"
         ),
         "report": "Report",
         "email_validation": "Enter a valid email",
         "other_message": "Choose the option that is right for you...",
-        "processing_care_program": "Writing a nursing program..."
+        "processing_care_program": "Please wait, we are preparing a personalized report for you....",
+        "final_message": "Thank you for your participation! We wish you success and health of your skin 🌿"
     },
     "de": {
         "back_button": "⬅️ Zurück",
@@ -221,13 +196,14 @@ translations = {
             "Das Foto sollte ohne Make-up, bei guter Beleuchtung, <b>im linken Profil aufgenommen sein</b>"
         ),
         "no_face_error_left": "Bitte senden Sie ein Bild mit einem Gesicht",
-        "thanks_message": (
-            "Vielen Dank für Ihre Antworten! Basierend auf Ihren Präferenzen haben wir das optimale Pflegeprogramm ausgewählt"
+        "final_report_message": (
+            "👩‍🏫 Fragen Sie einen Beauty Masters Berater für alle Ihre Fragen"
         ),
         "report": "Bericht",
         "email_validation": "Geben Sie eine gültige E-Mail ein",
         "other_message": "Wählen Sie die Option, die für Sie geeignet ist...",
-        "processing_care_program": "Ein Pflegeprogramm schreiben..."
+        "processing_care_program": "Bitte warten Sie, wir bereiten einen personalisierten Bericht für Sie vor....",
+        "final_message": "Vielen Dank für Ihre Teilnahme! Wir wünschen Ihnen Erfolg und Gesundheit für Ihre Haut 🌿"
     }
 }
 

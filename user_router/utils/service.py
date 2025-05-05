@@ -2,6 +2,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from docxtpl import DocxTemplate
 import os
+import subprocess
 
 from database.db import get_user_language
 from user_router.utils.locales import translations, fields_translations
@@ -16,7 +17,6 @@ def sync_show_progress(data):
     fields = {
         translations["name"]: data.get("name"),
         translations["country"]: data.get("country"),
-        translations["email"]: data.get("email"),
         translations["age"]: data.get("age"),
         translations["gender"]: data.get("gender"),
         translations["skin_type"]: data.get("skin_type"),
@@ -51,7 +51,6 @@ async def show_progress(state: FSMContext):
     fields = {
         translations["name"]: data.get("name"),
         translations["country"]: data.get("country"),
-        translations["email"]: data.get("email"),
         translations["age"]: data.get("age"),
         translations["gender"]: data.get("gender"),
         translations["skin_type"]: data.get("skin_type"),
@@ -96,7 +95,20 @@ def get_docx_file(data: dict, user_id: int, state_data) -> any:
     }
     # print(context)
     doc.render(context)
-    doc.save(f"images/{user_id}/{get_text(user_id=user_id, key="report")}.docx") 
+    save_path = f"images/{user_id}/{get_text(user_id=user_id, key='report')}.docx"
+    doc.save(save_path) 
+    generate_pdf(doc_path=save_path, path=f"./images/{user_id}")
+
+def generate_pdf(doc_path, path):
+    subprocess.call(['soffice',
+                 # '--headless',
+                 '--convert-to',
+                 'pdf',
+                 '--outdir',
+                 path,
+                 doc_path])
+    return doc_path
+
 
 def get_text(user_id: int, key: str, **kwargs) -> str:
     lang = get_user_language(user_id=user_id)

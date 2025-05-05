@@ -30,20 +30,20 @@ async def process_back(callback: types.CallbackQuery, state: FSMContext):
             f"{progress}\n\n{get_text(user_id, 'country_question')}",
             reply_markup=get_back_button("name", user_id=user_id)
         )
-        await state.set_state(Form.country)
+        await state.set_state(Form.age)
 
-    elif back_to == "email":
-        await callback.message.edit_text(
-            f"{progress}\n\n{get_text(user_id, 'email_question')}",
-            reply_markup=get_back_button("country", user_id=user_id)
-        )
-        await state.set_state(Form.email)
+    # elif back_to == "email":
+    #     await callback.message.edit_text(
+    #         f"{progress}\n\n{get_text(user_id, 'email_question')}",
+    #         reply_markup=get_back_button("country", user_id=user_id)
+    #     )
+    #     await state.set_state(Form.email)
 
     elif back_to == "age":
         builder = InlineKeyboardBuilder()
         for key in AGES:
             builder.button(text=get_inline_text(user_id, "AGES", key), callback_data=f"age_{key}")
-        builder.button(text=get_text(user_id, "back_button"), callback_data="back_email")
+        builder.button(text=get_text(user_id, "back_button"), callback_data="back_country")
         builder.adjust(2)
 
         await callback.message.edit_text(
