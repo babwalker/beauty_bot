@@ -601,12 +601,17 @@ async def process_budget(callback: types.CallbackQuery, state: FSMContext):
     
     builder = InlineKeyboardBuilder()
     for key in COMPOSITION_PREFERENCES:
+        if key == "no-preference": continue
         emoji = "✅" if get_inline_text(callback.from_user.id, "COMPOSITION_PREFERENCES", key) in selected_prefs else "◻️"
         builder.button(
             text=f"{emoji} {get_inline_text(callback.from_user.id, 'COMPOSITION_PREFERENCES', key)}",
             callback_data=f"composition_{key}"
         )
     
+    builder.button(
+        text=get_inline_text(callback.message.chat.id, "COMPOSITION_PREFERENCES", "no-preference"),
+        callback_data="no_preferenece"
+    )
     builder.button(
         text=get_text(callback.from_user.id, "done_button"),
         callback_data="done_composition"

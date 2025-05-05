@@ -198,11 +198,16 @@ async def process_back(callback: types.CallbackQuery, state: FSMContext):
         data = await state.get_data()
         selected_prefs = data.get("composition_prefs", [])
         for key in COMPOSITION_PREFERENCES:
+            if key == "no-preference": continue
             emoji = "✅" if get_inline_text(user_id, "COMPOSITION_PREFERENCES", key) in selected_prefs else "◻️"
             builder.button(
                 text=f"{emoji} {get_inline_text(user_id, 'COMPOSITION_PREFERENCES', key)}",
                 callback_data=f"composition_{key}"
             )
+        builder.button(
+            text=get_inline_text(callback.message.chat.id, "COMPOSITION_PREFERENCES", "no-preference"),
+            callback_data="no_preferenece"
+        )
         builder.button(
             text=get_text(user_id, "done_button"),
             callback_data="done_composition"
