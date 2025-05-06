@@ -195,6 +195,7 @@ async def process_back(callback: types.CallbackQuery, state: FSMContext):
 
     elif back_to == "composition":
         builder = InlineKeyboardBuilder()
+        await state.update_data(composition_prefs=[])
         data = await state.get_data()
         selected_prefs = data.get("composition_prefs", [])
         for key in COMPOSITION_PREFERENCES:

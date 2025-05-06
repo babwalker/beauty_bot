@@ -13,6 +13,13 @@ def sync_show_progress(data):
 
     # Получаем переводы для текущего языка, или используем английский по умолчанию
     translations = fields_translations.get(user_language)
+    if data.get("composition_prefs"):
+        if type(data.get("composition_prefs")) == list:
+            composition_prefs = ", ".join(data.get("composition_prefs"))
+        elif type(data.get("composition_prefs")) == str:
+            composition_prefs = data.get("composition_prefs")
+    else:
+        composition_prefs = None
 
     fields = {
         translations["name"]: data.get("name"),
@@ -27,7 +34,7 @@ def sync_show_progress(data):
         translations["daily_products"]: ", ".join(data.get("daily_products")) if data.get("daily_products") else None,
         translations["procedures_frequency"]: data.get("procedures_frequency"),
         translations["budget"]: data.get("budget"),
-        translations["composition_prefs"]: ", ".join(data.get("composition_prefs")) if data.get("composition_prefs") else None,
+        translations["composition_prefs"]: composition_prefs,
         translations["full_face"]: data.get("full_face"),
         translations["right_side_face"]: data.get("right_side_face"),
         translations["left_side_face"]: data.get("left_side_face")
@@ -47,6 +54,13 @@ async def show_progress(state: FSMContext):
 
     # Получаем переводы для текущего языка, или используем английский по умолчанию
     translations = fields_translations.get(user_language)
+    if data.get("composition_prefs"):
+        if type(data.get("composition_prefs")) == list:
+            composition_prefs = ", ".join(data.get("composition_prefs"))
+        elif type(data.get("composition_prefs")) == str:
+            composition_prefs = data.get("composition_prefs")
+    else:
+        composition_prefs = None
 
     fields = {
         translations["name"]: data.get("name"),
@@ -61,7 +75,7 @@ async def show_progress(state: FSMContext):
         translations["daily_products"]: ", ".join(data.get("daily_products")) if data.get("daily_products") else None,
         translations["procedures_frequency"]: data.get("procedures_frequency"),
         translations["budget"]: data.get("budget"),
-        translations["composition_prefs"]: ", ".join(data.get("composition_prefs")) if data.get("composition_prefs") else None,
+        translations["composition_prefs"]: composition_prefs,
         translations["full_face"]: data.get("full_face"),
         translations["right_side_face"]: data.get("right_side_face"),
         translations["left_side_face"]: data.get("left_side_face")
