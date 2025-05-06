@@ -32,8 +32,6 @@ Get a PDF of your professional skincare plan: morning, evening, week.
 ✔️ Prediction of improvement
 
 🔬 No advertising. Science only. Your perfect care starts here 🌸
-
-Translated with DeepL.com (free version)
 """
 
 de_start_message = """
