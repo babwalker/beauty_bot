@@ -88,7 +88,7 @@ async def start(message: types.Message, state: FSMContext):
     await state.clear()
     await message.delete()
     await message.answer_video(
-        video="BAACAgIAAxkBAAIaA2gMt4G56VfI1mpjqSlcTNfltjmWAAJ1fAAC-SppSL1p7Jofpy1PNgQ", 
+        video="BAACAgIAAxkBAAIgm2gZ_b0ln0HIwLZbJUiusB46kMkXAAJscgACHyDQSJlB-lUffNPsNgQ", 
         caption=get_text(message.from_user.id, "start"),
         reply_markup=builder.as_markup()
     )
