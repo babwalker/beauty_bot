@@ -1,12 +1,12 @@
 ru_start_message = """
-🎓 Ваша идеальная программа ухода за кожей лица. 
+<b>🎓 Ваша идеальная программа ухода за кожей лица.</b> 
 
-В честь юбилея Академии BWA - онлайн и бесплатно!
+<i><b>В честь юбилея Академии BWA - онлайн и бесплатно!</b></i>
 
 📲 Просто загрузите фото и укажите тип кожи —
 получите сразу в PDF профессиональный план ухода: утро, вечер, неделя.
 
-💼 Что вы получите:
+<b>💼 Что вы получите:</b>
 ✔️ Профессиональный анализ кожи лица
 ✔️ Персональный уход
 ✔️ Подбор косметики (3 бюджета)
@@ -17,14 +17,14 @@ ru_start_message = """
 """
 
 en_start_message = """
-🎓 Your perfect facial skin care program. 
+<b>🎓 Your perfect facial skin care program.</b> 
 
-In honor of BWA Academy's anniversary - online and free!
+<i><b>In honor of BWA Academy's anniversary - online and free!</b></i>
 
 📲 Simply upload a photo and your skin type - and you'll get a professional skincare plan in PDF: morning, night, week.
 Get a PDF of your professional skincare plan: morning, evening, week.
 
-💼 What you get:
+<b>💼 What you get:</b>
 ✔️ Professional facial skin analysis
 ✔️ Personalized care
 ✔️ Cosmetics selection (3 budgets)
@@ -35,14 +35,14 @@ Get a PDF of your professional skincare plan: morning, evening, week.
 """
 
 de_start_message = """
-🎓 Ihr perfektes Programm für die Gesichtspflege. 
+<b>🎓 Ihr perfektes Programm für die Gesichtspflege.</b> 
 
-Zum Jubiläum der BWA Academy - online und kostenlos!
+<i><b>Zum Jubiläum der BWA Academy - online und kostenlos!</b></i>
 
 📲 Einfach ein Foto und deinen Hauttyp hochladen - und du bekommst einen professionellen Pflegeplan als PDF: morgens, abends, wöchentlich.
 Holen Sie sich Ihren professionellen Hautpflegeplan als PDF: morgens, abends, wöchentlich.
 
-💼 Was Sie bekommen:
+<b>💼 Was Sie bekommen:</b>
 ✔️ Professionelle Analyse der Gesichtshaut
 ✔️ Personalisierte Pflege
 ✔️ Auswahl von Kosmetika (3 Budgets)

@@ -56,7 +56,7 @@ async def set_language(callback: types.CallbackQuery, state: FSMContext):
     builder.adjust(1)
 
     await state.clear()
-    await callback.message.edit_caption(caption=get_text(callback.from_user.id, "start"), reply_markup=builder.as_markup())
+    await callback.message.edit_caption(caption=get_text(callback.from_user.id, "start"), reply_markup=builder.as_markup(), parse_mode=ParseMode.HTML)
 
 @router.message(Command("start"))
 async def start(message: types.Message, state: FSMContext):
@@ -90,7 +90,8 @@ async def start(message: types.Message, state: FSMContext):
     await message.answer_video(
         video="BAACAgIAAxkBAAIgm2gZ_b0ln0HIwLZbJUiusB46kMkXAAJscgACHyDQSJlB-lUffNPsNgQ", 
         caption=get_text(message.from_user.id, "start"),
-        reply_markup=builder.as_markup()
+        reply_markup=builder.as_markup(),
+        parse_mode=ParseMode.HTML
     )
 
 @router.callback_query(F.data == "start")
