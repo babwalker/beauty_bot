@@ -684,8 +684,8 @@ async def update_composition_keyboard(message: types.Message, state: FSMContext)
 #Обработчик выбора косметики без предпочтений
 @router.callback_query(F.data == "no_preferenece", Form.composition_preferences)
 async def process_no_preference(callback: types.CallbackQuery, state: FSMContext):
-    await state.update_data(selected_prefs=[])
-    await state.update_data(selected_prefs=get_inline_text(callback.from_user.id, "COMPOSITION_PREFERENCES", "no-preference"))
+    await state.update_data(composition_prefs=[])
+    await state.update_data(composition_prefs=get_inline_text(callback.from_user.id, "COMPOSITION_PREFERENCES", "no-preference"))
 
     progress = await show_progress(state)
 
