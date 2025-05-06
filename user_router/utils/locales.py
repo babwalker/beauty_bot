@@ -1,52 +1,57 @@
 ru_start_message = """
-👋 Добро пожаловать в консультационный бот от онлайн-косметолога Академии BWA!
+🎓 Ваша идеальная программа ухода за кожей лица. 
 
-🌿 Здесь вы можете получить персональные рекомендации по уходу за кожей — без визита в салон!
+В честь юбилея Академии BWA - онлайн и бесплатно!
 
-📸 Просто загрузите фото лица, укажите ваш тип кожи и ответьте на несколько вопросов —  
-а мы подготовим для вас индивидуальный план ухода: утром, вечером, и на неделю вперёд.
+📲 Просто загрузите фото и укажите тип кожи —
+получите сразу в PDF профессиональный план ухода: утро, вечер, неделя.
 
-💡 Наши рекомендации:
-— Без рекламы  
-— Основаны на вашем типе кожи  
-— От сертифицированных специалистов  
+💼 Что вы получите:
+✔️ Профессиональный анализ кожи лица
+✔️ Персональный уход
+✔️ Подбор косметики (3 бюджета)
+✔️ Советы по питанию и режиму
+✔️ Прогноз улучшений
 
-🎥 Посмотрите короткое видео, как работает онлайн-анализ кожи:  
-[🔗 Видео 1 — Как проходит skin-анализ]
+🔬 Без рекламы. Только наука. Ваш идеальный уход начинается здесь 🌸
 """
 
 en_start_message = """
-👋 Welcome to the consultation bot from BWA Academy's online cosmetologist!
+🎓 Your perfect facial skin care program. 
 
-🌿 Here you can get personalized skincare recommendations - without a salon visit!
+In honor of BWA Academy's anniversary - online and free!
 
-📸 Just upload a photo of your face, indicate your skin type and answer a few questions - and we'll prepare a personalized consultation for you.  
-and we'll prepare a personalized care plan for you: morning, evening, and for the week ahead.
+📲 Simply upload a photo and your skin type - and you'll get a professional skincare plan in PDF: morning, night, week.
+Get a PDF of your professional skincare plan: morning, evening, week.
 
-💡 Our recommendations:
-- Ad-free  
-- Based on your skin type  
-- From certified professionals  
+💼 What you get:
+✔️ Professional facial skin analysis
+✔️ Personalized care
+✔️ Cosmetics selection (3 budgets)
+✔️ Nutrition and regimen tips
+✔️ Prediction of improvement
 
-🎥 Watch a short video on how online skin analysis works:  
-[🔗 Video 1 - How Skin Analysis Works]
+🔬 No advertising. Science only. Your perfect care starts here 🌸
+
+Translated with DeepL.com (free version)
 """
 
 de_start_message = """
-👋 Willkommen beim Beratungsbot der Online-Kosmetikerin der BWA-Akademie!
+🎓 Ihr perfektes Programm für die Gesichtspflege. 
 
-🌿 Hier bekommst du persönliche Pflegeempfehlungen - ganz ohne Salonbesuch!
+Zum Jubiläum der BWA Academy - online und kostenlos!
 
-📸 Laden Sie einfach ein Foto Ihres Gesichts hoch, geben Sie Ihren Hauttyp an und beantworten Sie ein paar Fragen - und schon erstellen wir eine individuelle Beratung für Sie.  
-und wir erstellen einen persönlichen Pflegeplan für Sie: morgens, abends und für die kommende Woche.
+📲 Einfach ein Foto und deinen Hauttyp hochladen - und du bekommst einen professionellen Pflegeplan als PDF: morgens, abends, wöchentlich.
+Holen Sie sich Ihren professionellen Hautpflegeplan als PDF: morgens, abends, wöchentlich.
 
-💡 Unsere Empfehlungen:
-- Werbefrei  
-- Basierend auf Ihrem Hauttyp  
-- Von zertifizierten Fachleuten  
+💼 Was Sie bekommen:
+✔️ Professionelle Analyse der Gesichtshaut
+✔️ Personalisierte Pflege
+✔️ Auswahl von Kosmetika (3 Budgets)
+✔️ Ernährungs- und Pflegetipps
+✔️ Vorhersage der Verbesserung
 
-🎥 Sehen Sie in einem kurzen Video, wie die Online-Hautanalyse funktioniert:  
-[🔗 Video 1 - Wie die Hautanalyse funktioniert]
+🔬 Keine Werbung. Nur Wissenschaft. Ihre perfekte Pflege beginnt hier 🌸.
 """
 
 translations = {
