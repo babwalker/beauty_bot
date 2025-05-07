@@ -899,7 +899,7 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
         builder = InlineKeyboardBuilder()
         builder.button(text=get_inline_text(user_id=message.from_user.id, category="FINAL_REPORT", key="our_courses"), url="https://bwa-akademy.online/courses")
         builder.button(text=get_inline_text(user_id=message.from_user.id, category="FINAL_REPORT", key="master_certification"), url="https://bwa-akademy.online/zertifizierung_offiziell/")
-        builder.button(text=get_inline_text(user_id=message.from_user.id, category="FINAL_REPORT", key="trainer_certification"), url="https://bwa-akademy.online/zertifizierung_offiziell/")
+        builder.button(text=get_inline_text(user_id=message.from_user.id, category="FINAL_REPORT", key="trainer_certification"), url="https://bwa-akademy.online/applicationbeautytrainer/")
         builder.button(text=get_inline_text(user_id=message.from_user.id, category="FINAL_REPORT", key="our_instagram"), url="https://www.instagram.com/beauty.akademy.world/")
         builder.adjust(1)
 
