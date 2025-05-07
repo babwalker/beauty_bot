@@ -905,16 +905,16 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
 
         summary_report = get_summary_report(message.from_user.id, data)
         if summary_report:
-            get_docx_file(data=summary_report, user_id=message.from_user.id, state_data=data)
+            pdf_path = get_docx_file(data=summary_report, user_id=message.from_user.id, state_data=data)
         else:
             while True:
                 summary_report = get_summary_report(message.from_user.id, data)
                 if summary_report:
-                    get_docx_file(data=summary_report, user_id=message.from_user.id, state_data=data)
+                    pdf_path = get_docx_file(data=summary_report, user_id=message.from_user.id, state_data=data)
                     break
                 else:
                     await asyncio.sleep(60)
-        document = FSInputFile(path=f"images/{message.from_user.id}/{get_text(user_id=message.from_user.id, key="report")}.pdf")
+        document = FSInputFile(path=pdf_path)
 
         await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")) + 1)
 

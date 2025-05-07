@@ -113,6 +113,7 @@ def get_docx_file(data: dict, user_id: int, state_data) -> any:
     save_path = f"images/{user_id}/your_skin_analysis_{current_date}.docx"
     doc.save(save_path) 
     generate_pdf(doc_path=save_path, path=f"./images/{user_id}")
+    return f"/images/{user_id}/your_skin_analysis_{current_date}.pdf"
 
 def generate_pdf(doc_path, path):
     subprocess.call(['soffice',
