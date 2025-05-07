@@ -1,7 +1,7 @@
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from docxtpl import DocxTemplate
-import os
+from datetime import datetime
 import subprocess
 
 from database.db import get_user_language
@@ -109,7 +109,8 @@ def get_docx_file(data: dict, user_id: int, state_data) -> any:
     }
     # print(context)
     doc.render(context)
-    save_path = f"images/{user_id}/{get_text(user_id=user_id, key='report')}.docx"
+    current_date = datetime.now().strftime("%Y.%m.%d")
+    save_path = f"images/{user_id}/your_skin_analysis_{current_date}.docx"
     doc.save(save_path) 
     generate_pdf(doc_path=save_path, path=f"./images/{user_id}")
 
