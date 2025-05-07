@@ -739,7 +739,7 @@ async def test(message: types.Message, state: FSMContext):
 async def process_photo_full_face(message: types.Message, state: FSMContext):
     data = await state.get_data()  # Перечитываем обновленные данные
     if data.get("error_message"):
-        await message.delete(data.get("error_message"))
+        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("error_message")) 
         await state.update_data(error_message=None)
     if "image_count" not in data:
         await state.update_data(image_count=0)
@@ -803,7 +803,7 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
 async def process_photo_right_profile_face(message: types.Message, state: FSMContext):
     data = await state.get_data()  # Перечитываем обновленные данные
     if data.get("error_message"):
-        await message.delete(data.get("error_message"))
+        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("error_message")) 
         await state.update_data(error_message=None)
     if "image_count" not in data:
         await state.update_data(image_count=0)
@@ -857,7 +857,7 @@ async def process_photo_right_profile_face(message: types.Message, state: FSMCon
 async def process_photo_left_side_face(message: types.Message, state: FSMContext):
     data = await state.get_data()  # Перечитываем обновленные данные
     if data.get("error_message"):
-        await message.delete(data.get("error_message"))
+        await bot.delete_message(chat_id=message.chat.id, message_id=data.get("error_message")) 
         await state.update_data(error_message=None)
     if "image_count" not in data:
         await state.update_data(image_count=0)
