@@ -914,7 +914,7 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
                     break
                 else:
                     await asyncio.sleep(60)
-        document = FSInputFile(path=pdf_path)
+        document = FSInputFile(path=f".{pdf_path}")
 
         await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")) + 1)
 
