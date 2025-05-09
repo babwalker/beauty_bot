@@ -41,9 +41,7 @@ def sync_show_progress(data):
         translations["procedures_frequency"]: data.get("procedures_frequency"),
         translations["budget"]: data.get("budget"),
         translations["composition_prefs"]: composition_prefs,
-        translations["full_face"]: data.get("full_face"),
-        translations["right_side_face"]: data.get("right_side_face"),
-        translations["left_side_face"]: data.get("left_side_face")
+        translations["full_face"]: data.get("full_face")
     }
 
     progress_text = "\n".join(
@@ -82,9 +80,7 @@ async def show_progress(state: FSMContext):
         translations["procedures_frequency"]: data.get("procedures_frequency"),
         translations["budget"]: data.get("budget"),
         translations["composition_prefs"]: composition_prefs,
-        translations["full_face"]: data.get("full_face"),
-        translations["right_side_face"]: data.get("right_side_face"),
-        translations["left_side_face"]: data.get("left_side_face")
+        translations["full_face"]: data.get("full_face")
     }
 
     progress_text = "\n".join(
