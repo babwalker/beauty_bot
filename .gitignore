@@ -3,3 +3,4 @@ User.db
 test.py
 venv
 __pycache__
+service_account.json

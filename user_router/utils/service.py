@@ -1,8 +1,14 @@
+import asyncio
+import json
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from docxtpl import DocxTemplate
 from datetime import datetime
-import subprocess
+from aiogoogle import Aiogoogle
+import asyncio
+import logging
+import json
+import aiohttp
 
 from database.db import get_user_language
 from user_router.utils.locales import translations, fields_translations
@@ -112,19 +118,46 @@ def get_docx_file(data: dict, user_id: int, state_data) -> any:
     current_date = datetime.now().strftime("%Y.%m.%d")
     save_path = f"images/{user_id}/your_skin_analysis_{current_date}.docx"
     doc.save(save_path) 
-    generate_pdf(doc_path=save_path, path=f"./images/{user_id}")
+    logging.info(asyncio.run(generate_pdf(filename=save_path)))
     return f"/images/{user_id}/your_skin_analysis_{current_date}.pdf"
 
-def generate_pdf(doc_path, path):
-    subprocess.call(['soffice',
-                 # '--headless',
-                 '--convert-to',
-                 'pdf',
-                 '--outdir',
-                 path,
-                 doc_path])
-    return doc_path
+async def generate_pdf(filename: str) -> str:
+    async with Aiogoogle(service_account_creds=json.load(open('service_account.json', encoding='utf-8'))) as aiogoogle:
+        file_metadata = {"name": filename,
+                        # "parents": ['1aW-FS6ZzBW9sOFxMSGSNUonKrVDC_gHN'],
+                        "mimeType": "application/vnd.google-apps.document"
+                        }
 
+        gdrive = await aiogoogle.discover("drive", "v3")
+
+        resp = await aiogoogle.as_service_account(gdrive.files.create(json=file_metadata, upload_file=open(filename, 'rb').read(), fields=["id"]))
+
+        logging.info(resp)
+
+        await aiogoogle.as_service_account(
+            gdrive.permissions.create(
+                fileId=resp["id"],
+                json={"role": "reader", "type": "anyone", "value": "default"}
+            )
+        )
+
+        pdf_file = await aiogoogle.as_service_account(
+            gdrive.files.download(
+                fileId=resp["id"],
+                mimeType="application/pdf",
+            )
+        )
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(pdf_file["response"]["downloadUri"]) as response:
+                with open(f'{filename.replace(".docx", "")}.pdf', 'wb') as f:
+                    while True:
+                        chunk = await response.content.read(1024)
+                        if not chunk:
+                            break
+                        f.write(chunk)
+
+        return f'{filename.replace(".docx", "")}.pdf'
 
 def get_text(user_id: int, key: str, **kwargs) -> str:
     lang = get_user_language(user_id=user_id)
