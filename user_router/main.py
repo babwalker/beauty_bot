@@ -761,6 +761,8 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
     file_name = random.randint(100000, 1000000)
     file_path = f"images/{message.from_user.id}/{file_name}.jpg"
 
+    os.makedirs(f"images/{message.from_user.id}", exist_ok=True)
+
     await bot.download(file=file_id, destination=file_path)
     response = analysis_image(image_path=file_path)
 
