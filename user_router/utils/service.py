@@ -100,7 +100,7 @@ def get_back_button(state: str, user_id: int):
     builder.button(text=get_text(user_id=user_id, key="back_button"), callback_data=f"back_{state}")
     return builder.as_markup()
 
-def get_docx_file(data: dict, user_id: int, state_data) -> any:
+async def get_docx_file(data: dict, user_id: int, state_data) -> any:
     language = get_user_language(user_id=user_id)
 
     doc = DocxTemplate(f"templates/{language}_template.docx")
@@ -118,7 +118,7 @@ def get_docx_file(data: dict, user_id: int, state_data) -> any:
     current_date = datetime.now().strftime("%Y.%m.%d")
     save_path = f"images/{user_id}/your_skin_analysis_{current_date}.docx"
     doc.save(save_path) 
-    logging.info(asyncio.run(generate_pdf(filename=save_path)))
+    logging.info(await generate_pdf(filename=save_path))
     return f"/images/{user_id}/your_skin_analysis_{current_date}.pdf"
 
 async def generate_pdf(filename: str) -> str:

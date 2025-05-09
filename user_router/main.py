@@ -905,12 +905,12 @@ async def process_photo_left_side_face(message: types.Message, state: FSMContext
 
         summary_report = get_summary_report(message.from_user.id, data)
         if summary_report:
-            pdf_path = get_docx_file(data=summary_report, user_id=message.from_user.id, state_data=data)
+            pdf_path = await get_docx_file(data=summary_report, user_id=message.from_user.id, state_data=data)
         else:
             while True:
                 summary_report = get_summary_report(message.from_user.id, data)
                 if summary_report:
-                    pdf_path = get_docx_file(data=summary_report, user_id=message.from_user.id, state_data=data)
+                    pdf_path = await get_docx_file(data=summary_report, user_id=message.from_user.id, state_data=data)
                     break
                 else:
                     await asyncio.sleep(60)
