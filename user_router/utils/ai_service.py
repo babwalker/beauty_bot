@@ -69,6 +69,7 @@ summary_report_text = """You are a cosmetologist with 20 years of experience and
 
                 ### 1. Response structure and format
 
+                There must not be any * characters in the reply
                 The response **must* * consist * * strictly** of the following six sections, presented sequentially and without additional opening or closing phrases in json format:
 
                 {
