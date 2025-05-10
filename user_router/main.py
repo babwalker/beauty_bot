@@ -815,7 +815,7 @@ async def process_photo_full_face(message: types.Message, state: FSMContext):
         # await state.set_state(Form.photo_right_profile_face)
     else:
         await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id + int(data.get("image_count")))
-        await message.answer(get_text(message.from_user.id, "no_face_error"))
+        await message.answer(text=get_text(message.from_user.id, "no_face_error"), parse_mode=ParseMode.HTML)
         os.remove(f"images/{message.from_user.id}/{file_name}.jpg")
         await state.update_data(error_message=message.message_id + int(data.get("image_count")) + 1)
         await state.update_data(image_count=0)

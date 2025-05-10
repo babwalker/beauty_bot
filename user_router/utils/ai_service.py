@@ -1,4 +1,5 @@
 import os
+import re
 import google.generativeai as genai
 from google import genai as text_genai
 from google.genai import types
@@ -210,7 +211,7 @@ def get_summary_report(user_id: any, data):
 
         json_data = "".join(response)
 
-        cleaned_json = json_data.strip('```json').strip('```').strip().replace("*", "")
+        cleaned_json = clean_response_text(json_data)
         print(cleaned_json)
         # Парсим в словарь
         data_dict = json.loads(cleaned_json)
@@ -219,3 +220,11 @@ def get_summary_report(user_id: any, data):
     except Exception as e:
         print(f"Error generating content: {str(e)}")
         return None
+    
+def clean_response_text(text: str) -> str:
+    """Очищает текст ответа: удаляет квадратные скобки и форматирует для JSON"""
+    # Удаляем квадратные скобки с цифрами
+    text = re.sub(r'\[\d+(?:,\s*\d+)*\]', '', text)
+    # Дополнительная очистка (если нужно)
+    text = text.strip('```json').strip('```').strip().replace("*", "")
+    return text

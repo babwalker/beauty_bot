@@ -88,13 +88,12 @@ translations = {
             "Загрузите фото лица для анализа - 📌 Важно: "
             "Фото должно быть сделано без макияжа, при хорошем освещении, профиль <b>слева</b>."
         ),
-        "no_face_error": "Отправьте изображение с лицом",
         "other_skin_problems": "Укажите другие проблемы кожи:",
         "other_daily_products": "Укажите другие используемые продукты:",
         "procedures_frequency_question": "Как часто вы делаете профессиональные косметологические процедуры?",
         "processing_photo": "Анализ фото...",
         "full_face": "Загружено",
-        "no_face_error_left": "Отправьте изображение с лицом",
+        "no_face_error": "«Пожалуйста, пришлите фото с вашим лицом <b>анфас</b> и <b>в хорошем освещении</b>",
         "final_report_message": (
             "👩‍🏫 Спросить консультанта бьюти мастеров по всем вопросам"
         ),
@@ -135,7 +134,6 @@ translations = {
             "Upload a profile photo for analysis - 📌 Important: "
             "The photo should be taken without makeup, with good lighting, <b>right side profile</b>."
         ),
-        "no_face_error": "Please send an image containing a face",
         "gender_question": "Specify your gender:",
         "other_skin_problems": "Specify other skin problems:",
         "other_daily_products": "Specify other products you use:",
@@ -146,7 +144,7 @@ translations = {
             "Upload a face photo for analysis - 📌 Important: "
             "The photo should be without makeup, with good lighting, <b>left profile view</b>."
         ),
-        "no_face_error_left": "Please send an image with a face",
+        "no_face_error": "Please send a photo of your face <b>from the front</b> and <b>in good lighting</b>",
         "final_report_message": (
             "👩‍🏫 Ask a Beauty Masters consultant for all your questions"
         ),
@@ -187,7 +185,6 @@ translations = {
             "Lade ein Profilfoto zur Analyse hoch – 📌 Wichtig: "
             "Das Foto sollte ohne Make-up, bei guter Beleuchtung und <b>im rechten Profil aufgenommen werden</b>"
         ),
-        "no_face_error": "Bitte sende ein Bild mit einem Gesicht",
         "gender_question": "Gib dein Geschlecht an:",
         "other_skin_problems": "Gib weitere Hautprobleme an:",
         "other_daily_products": "Gib andere verwendete Produkte an:",
@@ -198,7 +195,7 @@ translations = {
             "Laden Sie ein Gesichtsfoto zur Analyse hoch - 📌 Wichtig: "
             "Das Foto sollte ohne Make-up, bei guter Beleuchtung, <b>im linken Profil aufgenommen sein</b>"
         ),
-        "no_face_error_left": "Bitte senden Sie ein Bild mit einem Gesicht",
+        "no_face_error": "Bitte senden Sie ein Foto Ihres Gesichts <b>von vorne</b> und <b>bei guter Beleuchtung</b>",
         "final_report_message": (
             "👩‍🏫 Fragen Sie einen Beauty Masters Berater für alle Ihre Fragen"
         ),
