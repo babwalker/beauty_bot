@@ -155,8 +155,8 @@ summary_report_text = """
 """
 
 def first_generate(user_language, user_data, user_id):
-    client = genai.Client(
-        api_key=os.environ.get("GEMINI_API_KEY"),
+    client = text_genai.Client(
+        api_key=settings.GENAI_TOKEN,
     )
 
     model = "gemini-2.0-flash"
@@ -272,14 +272,14 @@ Search the Internet for products and write the current price.
     ):
         if chunk.text:
             response.append(chunk.text) 
-    return response
+    return "".join(response)
 
 def get_summary_report(user_id: any, data):
     user_language = get_user_language(user_id=user_id)
     user_data = sync_show_progress(data)
     first_generate_response = first_generate(user_language=user_language, user_data=user_data, user_id=user_id)
-    client = genai.Client(
-        api_key=os.environ.get("GEMINI_API_KEY"),
+    client = text_genai.Client(
+        api_key=settings.GENAI_TOKEN,
     )
 
     model = "gemini-2.0-flash"
@@ -294,32 +294,32 @@ def get_summary_report(user_id: any, data):
     generate_content_config = types.GenerateContentConfig(
         temperature=0.65,
         response_mime_type="application/json",
-        response_schema=genai.types.Schema(
-            type = genai.types.Type.OBJECT,
+        response_schema=text_genai.types.Schema(
+            type = text_genai.types.Type.OBJECT,
             required = ["Introduction", "Skin Condition Analysis", "Lifestyle Impact on Skin", "Personal Skincare Recommendations", "Improvement Forecast", "Conclusion and Support"],
             properties = {
-                "Introduction": genai.types.Schema(
-                    type = genai.types.Type.STRING,
+                "Introduction": text_genai.types.Schema(
+                    type = text_genai.types.Type.STRING,
                     description = "Текст введения отчёта, начинающийся с эмодзи ✨ Введение",
                 ),
-                "Skin Condition Analysis": genai.types.Schema(
-                    type = genai.types.Type.STRING,
+                "Skin Condition Analysis": text_genai.types.Schema(
+                    type = text_genai.types.Type.STRING,
                     description = "Описание текущего состояния кожи на основе фото, начинающееся с эмодзи 🔎 Анализ состояния кожи",
                 ),
-                "Lifestyle Impact on Skin": genai.types.Schema(
-                    type = genai.types.Type.STRING,
+                "Lifestyle Impact on Skin": text_genai.types.Schema(
+                    type = text_genai.types.Type.STRING,
                     description = "Как образ жизни влияет на кожу, начинающееся с эмодзи 🌱 Влияние образа жизни",
                 ),
-                "Personal Skincare Recommendations": genai.types.Schema(
-                    type = genai.types.Type.STRING,
+                "Personal Skincare Recommendations": text_genai.types.Schema(
+                    type = text_genai.types.Type.STRING,
                     description = "Персональные рекомендации по уходу, начинающиеся с эмодзи 💧 Персональная программа ухода",
                 ),
-                "Improvement Forecast": genai.types.Schema(
-                    type = genai.types.Type.STRING,
+                "Improvement Forecast": text_genai.types.Schema(
+                    type = text_genai.types.Type.STRING,
                     description = "Ожидаемые изменения при соблюдении рекомендаций, начинающееся с эмодзи 📈 Прогноз улучшений",
                 ),
-                "Conclusion and Support": genai.types.Schema(
-                    type = genai.types.Type.STRING,
+                "Conclusion and Support": text_genai.types.Schema(
+                    type = text_genai.types.Type.STRING,
                     description = "Заключение и поддержка, начинающееся с эмодзи 🏁 Заключение и поддержка",
                 ),
             },
