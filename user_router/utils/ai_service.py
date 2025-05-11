@@ -89,71 +89,6 @@ def analysis_image(image_path: str):
     print(response.text)
     return json.loads(response.text)
 
-summary_report_text = """
-Ты — высококвалифицированная модель-редактор отчётов. На вход ты получаешь JSON-объект со следующими полями:
-
-{
-  "Introduction": string,
-  "Skin Condition Analysis": string,
-  "Lifestyle Impact on Skin": string,
-  "Personal Skincare Recommendations": string,
-  "Improvement Forecast": string,
-  "Conclusion and Support": string,
-  "Web search info": string,
-  "Google Search Suggestions": [string]
-}
-
-Твоя задача — вывести ОДИН JSON-объект строго по этой схеме:
-
-{
-  "type": "object",
-  "properties": {
-    "Introduction": {
-      "type": "string",
-      "description": "✨ Введение и текст введения отчёта"
-    },
-    "Skin Condition Analysis": {
-      "type": "string",
-      "description": "🔎 Анализ состояния кожи на основе фото"
-    },
-    "Lifestyle Impact on Skin": {
-      "type": "string",
-      "description": "🌱 Влияние образа жизни на кожу"
-    },
-    "Personal Skincare Recommendations": {
-      "type": "string",
-      "description": "💧 Персональная программа ухода в полном объёме"
-    },
-    "Improvement Forecast": {
-      "type": "string",
-      "description": "📈 Прогноз улучшений при соблюдении рекомендаций"
-    },
-    "Conclusion and Support": {
-      "type": "string",
-      "description": "🏁 Заключение и поддержка"
-    }
-  },
-  "required": [
-    "Introduction",
-    "Skin Condition Analysis",
-    "Lifestyle Impact on Skin",
-    "Personal Skincare Recommendations",
-    "Improvement Forecast",
-    "Conclusion and Support"
-  ],
-  "additionalProperties": false
-}
-
-Правила преобразования:
-1. Поля `Web search info` и `Google Search Suggestions` удалить; они не должны попасть в финальный вывод.
-2. Сохранять оригинальный текст всех полей дословно, без изменений, особенно раздел рекомендаций, за исключением любой Markdown-разметки.
-3. Удалить всю Markdown-разметку: заголовки уровня `#`, списковые маркеры `-`, `*`, цифры перед пунктами, подчёркивания и т. п.
-4. В начале каждого текстового поля вставить соответствующий эмодзи-заголовок (✨ для Introduction, 🔎 для Skin Condition Analysis, 🌱 для Lifestyle Impact on Skin, 💧 для Personal Skincare Recommendations, 📈 для Improvement Forecast, 🏁 для Conclusion and Support).
-5. Удалить любые числа в квадратных скобках — считать их техническим мусором.
-6. Не оставлять ссылок, скобочных ссылок или других технических пометок.
-7. Вывести только один JSON-объект, строго соответствующий указанной схеме.
-"""
-
 def first_generate(user_language, user_data, user_id):
     client = text_genai.Client(
         api_key=settings.GENAI_TOKEN,
@@ -287,7 +222,7 @@ def get_summary_report(user_id: any, data):
         types.Content(
             role="user",
             parts=[
-                types.Part.from_text(text=first_generate_response+f" write the report in {user_language}."),
+                types.Part.from_text(text=first_generate_response),
             ],
         ),
     ]
@@ -328,64 +263,66 @@ def get_summary_report(user_id: any, data):
             types.Part.from_text(text="""Ты — высококвалифицированная модель-редактор отчётов. На вход ты получаешь JSON-объект со следующими полями:
 
 {
-  \"Introduction\": string,
-  \"Skin Condition Analysis\": string,
-  \"Lifestyle Impact on Skin\": string,
-  \"Personal Skincare Recommendations\": string,
-  \"Improvement Forecast\": string,
-  \"Conclusion and Support\": string,
-  \"Web search info\": string,
-  \"Google Search Suggestions\": [string]
+  "Introduction": string,
+  "Skin Condition Analysis": string,
+  "Lifestyle Impact on Skin": string,
+  "Personal Skincare Recommendations": string,
+  "Improvement Forecast": string,
+  "Conclusion and Support": string,
+  "Web search info": string,
+  "Google Search Suggestions": [string]
 }
 
 Твоя задача — вывести ОДИН JSON-объект строго по этой схеме:
-                                 {
-  \"type\": \"object\",
-  \"properties\": {
-    \"Introduction\": {
-      \"type\": \"string\",
-      \"description\": \"✨ Введение и текст введения отчёта\"
+
+{
+  "type": "object",
+  "properties": {
+    "Introduction": {
+      "type": "string",
+      "description": "✨ Введение и текст введения отчёта"
     },
-    \"Skin Condition Analysis\": {
-      \"type\": \"string\",
-      \"description\": \"🔎 Анализ состояния кожи на основе фото\"
+    "Skin Condition Analysis": {
+      "type": "string",
+      "description": "🔎 Анализ состояния кожи на основе фото"
     },
-    \"Lifestyle Impact on Skin\": {
-      \"type\": \"string\",
-      \"description\": \"🌱 Влияние образа жизни на кожу\"
+    "Lifestyle Impact on Skin": {
+      "type": "string",
+      "description": "🌱 Влияние образа жизни на кожу"
     },
-    \"Personal Skincare Recommendations\": {
-      \"type\": \"string\",
-      \"description\": \"💧 Персональная программа ухода в полном объёме\"
+    "Personal Skincare Recommendations": {
+      "type": "string",
+      "description": "💧 Персональная программа ухода в полном объёме"
     },
-    \"Improvement Forecast\": {
-      \"type\": \"string\",
-      \"description\": \"📈 Прогноз улучшений при соблюдении рекомендаций\"
+    "Improvement Forecast": {
+      "type": "string",
+      "description": "📈 Прогноз улучшений при соблюдении рекомендаций"
     },
-    \"Conclusion and Support\": {
-      \"type\": \"string\",
-      \"description\": \"🏁 Заключение и поддержка\"
+    "Conclusion and Support": {
+      "type": "string",
+      "description": "🏁 Заключение и поддержка"
     }
   },
-  \"required\": [
-    \"Introduction\",
-    \"Skin Condition Analysis\",
-    \"Lifestyle Impact on Skin\",
-    \"Personal Skincare Recommendations\",
-    \"Improvement Forecast\",
-    \"Conclusion and Support\"
+  "required": [
+    "Introduction",
+    "Skin Condition Analysis",
+    "Lifestyle Impact on Skin",
+    "Personal Skincare Recommendations",
+    "Improvement Forecast",
+    "Conclusion and Support"
   ],
-  \"additionalProperties\": false
+  "additionalProperties": false
 }
 
 Правила преобразования:
 1. Поля `Web search info` и `Google Search Suggestions` удалить; они не должны попасть в финальный вывод.
-2. Сохранять оригинальный текст всех полей дословно, без изменений, особенно раздел рекомендаций, за исключением любой Markdown-разметки.
+2. Сохранять оригинальный текст всех полей дословно, без изменений, особенно раздел рекомендаций, за исключением любой Markdown-разметки. Допустимы изменения пунктуации, создание переносов строки и абзацев внутри логических блоков.
 3. Удалить всю Markdown-разметку: заголовки уровня `#`, списковые маркеры `-`, `*`, цифры перед пунктами, подчёркивания и т. п.
-4. В начале каждого текстового поля вставить соответствующий эмодзи-заголовок (✨ для Introduction, 🔎 для Skin Condition Analysis, 🌱 для Lifestyle Impact on Skin, 💧 для Personal Skincare Recommendations, 📈 для Improvement Forecast, 🏁 для Conclusion and Support).
-5. Удалить любые числа в квадратных скобках — считать их техническим мусором.
-6. Не оставлять ссылок, скобочных ссылок или других технических пометок.
-7. Вывести только один JSON-объект, строго соответствующий указанной схеме.  
+4. Сформировать логические абзацы, переносы строк. Исправить пунктуацию, и сделать текст внутри каждого блока более читаемым за счет абзацев и переносов строки.
+5. В начале каждого текстового поля вставить соответствующий эмодзи-заголовок (✨ для Introduction, 🔎 для Skin Condition Analysis, 🌱 для Lifestyle Impact on Skin, 💧 для Personal Skincare Recommendations, 📈 для Improvement Forecast, 🏁 для Conclusion and Support).
+6. Удалить любые числа в квадратных скобках — считать их техническим мусором.
+7. Не оставлять ссылок, скобочных ссылок или других технических пометок.
+8. Вывести только один JSON-объект, строго соответствующий указанной схеме.
 """),
         ],
     )
